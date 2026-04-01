@@ -161,7 +161,7 @@ export default function OnboardingGuide() {
 
                         {currentStep === 0 && (
                             <a
-                                href="https://x.com/OceanXPac"
+                                href="https://x.com/OceanXPaci"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn-x-follow"
