@@ -9,9 +9,10 @@ export function useMarketStats() {
     useEffect(() => {
         const fetchAll = async () => {
             try {
+                const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
                 const [overviewRes, histRes] = await Promise.all([
-                    fetch('http://localhost:8001/api/stats/overview').then(r => r.json()),
-                    fetch('http://localhost:8001/api/stats/historical').then(r => r.json()),
+                    fetch(`${baseUrl}/api/stats/overview`).then(r => r.json()),
+                    fetch(`${baseUrl}/api/stats/historical`).then(r => r.json()),
                 ]);
 
                 if (overviewRes.success) setStats(overviewRes.data);
