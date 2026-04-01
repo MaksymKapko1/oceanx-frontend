@@ -20,8 +20,10 @@ export default function LeaderboardTable() {
         try {
             setLoading(true);
             const offset = currentPage * PAGE_SIZE;
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+
             const response = await fetch(
-                `http://localhost:8001/api/leaderboard?period=${currentPeriod}&limit=${PAGE_SIZE}&offset=${offset}`
+                `${baseUrl}/api/leaderboard?period=${currentPeriod}&limit=${PAGE_SIZE}&offset=${offset}`
             );
             const res = await response.json();
             if (res.success && res.data) {

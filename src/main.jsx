@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './main.css'
 import App from './app.jsx'
+import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter } from "react-router-dom";
 import { PrivyProvider } from '@privy-io/react-auth';
 import { toSolanaWalletConnectors } from '@privy-io/react-auth/solana';
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')).render(
         >
             <BrowserRouter>
                 <App />
+                <Analytics />
             </BrowserRouter>
         </PrivyProvider>
     </StrictMode>

@@ -12,7 +12,10 @@ export default function LiquidationsTable() {
 
     // 1. Первичная загрузка через REST
     useEffect(() => {
-        fetch('http://localhost:8001/api/liquidations/?limit=5')
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+        const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8001/ws';
+
+        fetch(`${baseUrl}/api/liquidations/?limit=5`)
             .then(res => res.json())
             .then(data => {
                 setLiquidations(data);
@@ -24,7 +27,7 @@ export default function LiquidationsTable() {
             });
 
         // 2. Подключение к WebSocket
-        socket.current = new WebSocket('ws://localhost:8001/ws');
+        socket.current = new WebSocket(wsUrl);
 
         socket.current.onopen = () => console.log('✅ Connected to Liq WebSocket');
 
