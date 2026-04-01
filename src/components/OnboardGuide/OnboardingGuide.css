@@ -18,17 +18,26 @@
 /* --- 2. ГЛАВНОЕ ОКНО ГАЙДА (Широкое стекло) --- */
 .guide-glass-modal {
     position: fixed;
-    width: 800px !important; /* Большое окно как просил */
-    max-width: 90%;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 15, 25, 0.95) 100%);
-    backdrop-filter: blur(25px) saturate(160%);
-    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    /* Вместо 800px делаем адаптивно */
+    width: 90% !important;
+    max-width: 800px;
+
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(8, 15, 25, 0.98) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
     border-radius: 24px !important;
-    padding: 48px !important;
+    padding: 40px !important;
     z-index: 9999;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Чтобы на маленьких экранах можно было прокрутить само описание */
+    max-height: 90vh;
+    overflow-y: auto;
+
+    /* Центрирование */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
 }
 
 /* --- 3. УМНАЯ СТРЕЛОЧКА --- */
@@ -217,4 +226,44 @@
     background: #e2e8f0;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+    .guide-glass-modal {
+        padding: 24px !important; /* Меньше отступы на мобилке */
+    }
+
+    .guide-content-wrapper {
+        flex-direction: column; /* Складываем акулу и текст в колонку */
+        gap: 20px;
+        text-align: center;
+    }
+
+    .mascot-avatar-img {
+        width: 140px !important; /* Уменьшаем акулу для телефона */
+    }
+
+    .guide-title {
+        font-size: 1.5rem !important; /* Уменьшаем заголовок */
+    }
+
+    .guide-description {
+        font-size: 0.95rem !important;
+        margin-bottom: 20px;
+    }
+
+    .guide-actions {
+        flex-direction: column-reverse; /* Кнопка "Next" будет сверху, "Skip" снизу */
+        gap: 16px;
+    }
+
+    .guide-next-btn {
+        width: 100%; /* Кнопка на всю ширину для удобства нажатия пальцем */
+        justify-content: center;
+    }
+
+    .btn-x-follow {
+        width: 100%;
+        justify-content: center;
+    }
 }
