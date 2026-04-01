@@ -43,7 +43,8 @@ export default function HeatmapPage() {
     const regularMarkets = filteredMarkets.filter(m => !m.hot);
 
     useEffect(() => {
-        const ws = new WebSocket('ws://localhost:8001/ws');
+        const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8001/ws';
+        const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
         ws.onopen = () => {
             setIsConnected(true);

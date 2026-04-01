@@ -9,7 +9,8 @@ export default function LiveTicker() {
 
     const fetchTicker = async () => {
         try {
-            const res = await fetch('/api/stats/overview');
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+            const res = await fetch(`${baseUrl}/api/stats/overview`);
             const json = await res.json();
             if (!json.success) return;
 
