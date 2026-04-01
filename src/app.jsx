@@ -1,0 +1,25 @@
+import { Routes, Route } from "react-router-dom";
+import AppHeader from "./components/AppHeader.jsx";
+import StatsPage from "./pages/StatsPage.jsx";
+import MainPage from "./pages/MainPage.jsx";
+import CopyTradingPage from "./pages/CopyTradingPage.jsx";
+import HeatmapPage from "./pages/HeatmapPage.jsx";
+import OnboardingGuide from "./components/OnboardGuide/OnboardingGuide.jsx";
+import React from "react";
+
+function App() {
+    return (
+            <>
+                <AppHeader />
+                <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/stats" element={<StatsPage />} />
+                    <Route path="/heatmaps" element={<HeatmapPage />} />
+                    <Route path="/copytrading" element={<CopyTradingPage />} />
+                </Routes>
+                <OnboardingGuide/>
+            </>
+    )
+}
+
+export default App;

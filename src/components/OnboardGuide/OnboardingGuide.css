@@ -1,0 +1,220 @@
+/* --- 1. ГЛОБАЛЬНЫЙ ФОН (Оверлей) --- */
+.guide-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 15, 25, 0.6);
+    z-index: 9998;
+    animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --- 2. ГЛАВНОЕ ОКНО ГАЙДА (Широкое стекло) --- */
+.guide-glass-modal {
+    position: fixed;
+    width: 800px !important; /* Большое окно как просил */
+    max-width: 90%;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 15, 25, 0.95) 100%);
+    backdrop-filter: blur(25px) saturate(160%);
+    -webkit-backdrop-filter: blur(25px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    border-radius: 24px !important;
+    padding: 48px !important;
+    z-index: 9999;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- 3. УМНАЯ СТРЕЛОЧКА --- */
+.guide-arrow-up {
+    position: absolute;
+    top: -16px;
+    /* Позиция считается в JS: --arrow-left */
+    left: var(--arrow-left, 50%) !important;
+    transform: translateX(-50%) rotate(45deg);
+    width: 32px;
+    height: 32px;
+    background: rgba(15, 23, 42, 0.98);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: -1;
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- 4. МАСКОТ АКУЛА (Чисто, без рамок) --- */
+.guide-content-wrapper {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+}
+
+.mascot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.mascot-avatar-img {
+    width: 220px !important;
+    height: auto !important;
+    max-height: 300px;
+    object-fit: contain !important;
+    /* Убираем всё лишнее */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    /* Тень только по контуру акулы */
+    filter: drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.6))
+    drop-shadow(0px 0px 15px rgba(45, 212, 191, 0.3));
+    animation: floatMascot 3s ease-in-out infinite;
+}
+
+@keyframes floatMascot {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.mascot-name {
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    color: #2dd4bf !important;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* --- 5. ТЕКСТ И КОНТЕНТ --- */
+.guide-text-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.guide-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.guide-title {
+    color: white;
+    font-size: 2rem !important;
+    font-weight: 800;
+    margin: 0;
+}
+
+.guide-description {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.1rem !important;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    min-height: 70px;
+}
+
+/* --- 6. КНОПКИ И ПАГИНАЦИЯ --- */
+.guide-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.guide-skip-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.guide-skip-btn:hover { color: white; }
+
+.step-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: 0.3s;
+}
+
+.dot.active {
+    background: #2dd4bf;
+    width: 20px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
+}
+
+.guide-next-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #2dd4bf;
+    color: #0f172a;
+    border: none;
+    padding: 12px 28px !important;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.guide-next-btn:hover {
+    background: #14b8a6;
+    transform: translateX(3px);
+}
+
+/* --- 7. ПОДСВЕТКА ЦЕЛИ НА САЙТЕ --- */
+.guide-highlight-target {
+    position: relative !important;
+    z-index: 10000 !important;
+    box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.3), 0 0 30px rgba(45, 212, 191, 0.6) !important;
+    border-radius: inherit;
+    transition: box-shadow 0.3s ease;
+}
+
+/* Цвета для иконок */
+.text-teal { color: #2dd4bf; }
+.text-blue { color: #3b82f6; }
+.text-purple { color: #a855f7; }
+
+/* --- КНОПКА FOLLOW НА X --- */
+.btn-x-follow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    margin-bottom: 8px; /* Даем отступ до кнопок навигации */
+    padding: 10px 20px;
+    background: white;
+    color: black;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.2s ease, background 0.2s ease;
+    width: fit-content; /* Чтобы кнопка не растягивалась на всю ширину */
+}
+
+.btn-x-follow:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}

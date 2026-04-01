@@ -1,0 +1,99 @@
+/* src/components/LiveTicker/LiveTicker.css */
+
+.live-ticker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 34px;
+    background: rgba(34, 211, 238, 0.04);
+    border-bottom: 1px solid rgba(34, 211, 238, 0.1);
+    overflow: hidden;
+    z-index: 49; /* ниже хедера */
+}
+
+/* ── Лейбл "LIVE" ── */
+.ticker-live-label {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 18px 0 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #22d3ee;
+    white-space: nowrap;
+    /* фэйд вправо чтобы текст не налезал на ленту */
+    background: linear-gradient(90deg, #0b0f19 75%, transparent);
+    position: relative;
+    z-index: 2;
+}
+
+.ticker-pulse {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22d3a0;
+    box-shadow: 0 0 6px #22d3a0;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.35; transform: scale(0.7); }
+}
+
+/* ── Прокрутка ── */
+.ticker-overflow {
+    flex: 1;
+    overflow: hidden;
+}
+
+.ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 100s linear infinite;
+}
+
+/* пауза при наведении */
+.ticker-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ── Один элемент ── */
+.ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 12.5px;
+    white-space: nowrap;
+    transition: background 0.4s ease;
+}
+
+.ticker-item.flash-up {
+    background: rgba(34, 211, 160, 0.1);
+}
+.ticker-item.flash-down {
+    background: rgba(244, 63, 94, 0.1);
+}
+
+.ticker-symbol {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    letter-spacing: 0.3px;
+}
+
+.ticker-price {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+}

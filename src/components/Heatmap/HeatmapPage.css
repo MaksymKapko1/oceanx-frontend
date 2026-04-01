@@ -1,0 +1,316 @@
+
+.heatmap-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    padding: 110px 24px 24px 24px;
+    height: 100vh;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* --- SIDEBAR (ЛЕВАЯ ПАНЕЛЬ) --- */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    overflow: hidden;
+    height: calc(100vh - 140px);
+}
+
+.sidebar-header {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-header h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    gap: 10px;
+    transition: border-color 0.2s;
+}
+
+.search-box:focus-within {
+    border-color: #22d3ee;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+/* Список маркетов */
+.market-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.market-list::-webkit-scrollbar { width: 4px; }
+.market-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+
+.market-section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 0 12px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.market-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border: 1px solid transparent;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 12px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.market-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.market-item.active {
+    background: rgba(34, 211, 238, 0.1);
+    border-color: rgba(34, 211, 238, 0.3);
+    color: #22d3ee;
+}
+
+.market-item .symbol { font-weight: 600; font-size: 0.95rem; }
+.market-item .volume { font-size: 0.8rem; opacity: 0.6; }
+
+/* --- MAIN AREA (ПРАВАЯ ПАНЕЛЬ) --- */
+.heatmap-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: calc(100vh - 140px);
+}
+
+/* Шапка с табами */
+.heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 28px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.active-market-info {
+    display: flex;         /* Включаем флекс */
+    align-items: center;    /* Выравниваем строго по центру вертикали */
+    gap: 12px;              /* Расстояние между текстом и плашкой */
+}
+
+.active-market-info h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;              /* Убираем отступы, чтобы не ломать центровку */
+    line-height: 1;         /* Фиксируем высоту строки */
+    background: linear-gradient(to right, #fff, rgba(255,255,255,0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-badge {
+    display: inline-flex;   /* Внутренний флекс для точки и текста */
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 8px;     /* Чуть более строгий радиус для Pro-вида */
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.status-badge.live {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.2);
+    background: rgba(16, 185, 129, 0.05);
+}
+.status-badge.live::before {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+.status-badge.connecting {
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.2);
+    background: rgba(245, 158, 11, 0.05);
+}
+.status-badge.connecting::before {
+    background: #f59e0b;
+}
+
+/* КНОПКИ ТАБОВ */
+.heatmap-controls {
+    display: flex;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 6px;
+    border-radius: 14px;
+}
+
+.heatmap-controls button {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.heatmap-controls button:hover {
+    color: white;
+}
+
+.heatmap-controls button.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ГЛАВНЫЙ КОНТЕЙНЕР ДЛЯ ГРАФИКА/СТАКАНА */
+.heatmap-canvas-container {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    display: flex;
+    justify-content: center; /* Чтобы стакан был по центру */
+    align-items: flex-start;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.placeholder-canvas {
+    margin: auto;
+    text-align: center;
+    opacity: 0.5;
+}
+
+/* --- АДАПТИВ --- */
+@media (max-width: 1100px) {
+    .heatmap-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding-top: 100px;
+    }
+    .sidebar { height: 400px; }
+    .heatmap-main { height: 700px; }
+}
+
+@media (max-width: 900px) {
+    .heatmap-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        max-height: 220px;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    /* Список рынков горизонтально */
+    .market-list {
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+        padding: 8px;
+    }
+
+    .market-section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+        padding: 0 8px;
+    }
+
+    .section-title { display: none; }
+
+    .market-item {
+        white-space: nowrap;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
+
+    .heatmap-main { width: 100%; }
+
+    .heatmap-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    .heatmap-controls {
+        width: 100%;
+        display: flex;
+        gap: 6px;
+    }
+
+    .heatmap-controls button {
+        flex: 1;
+        font-size: 0.8rem;
+        padding: 8px 6px;
+    }
+
+    .heatmap-canvas-container { padding: 12px !important; }
+}

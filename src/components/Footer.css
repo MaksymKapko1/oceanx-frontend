@@ -1,0 +1,100 @@
+.app-footer {
+    /* 🔥 Оставляем только тонкую полупрозрачную линию сверху */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* 🔥 Убираем темный фон-коробку, делаем полностью прозрачным */
+    background: transparent;
+
+    padding: 60px 20px 40px 20px;
+    margin-top: 80px;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Для мобилок */
+    gap: 40px;
+}
+
+.footer-brand {
+    max-width: 300px;
+}
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: white;
+}
+
+.footer-logo span {
+    color: #22d3ee; /* Бирюзовый акцент */
+}
+
+.footer-desc {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.footer-copyright {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.footer-links-grid {
+    display: flex;
+    gap: 80px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-column h4 {
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.footer-column a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.footer-column a:hover {
+    color: #22d3ee; /* Бирюзовый ховер */
+}
+
+/* Адаптив для телефонов в Футере */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .footer-brand {
+        margin-bottom: 10px;
+    }
+
+    .footer-links-grid {
+        flex-direction: column; /* Колонки ссылок друг под другом */
+        gap: 30px;
+        width: 100%;
+    }
+
+    .app-footer {
+        padding: 40px 20px 30px 20px; /* Чуть меньше отступов для мобилки */
+    }
+}

@@ -1,0 +1,395 @@
+/* --- 1. ОСНОВНОЙ КАРКАС ХЕДЕРА --- */
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.03); /* Легкое стекло */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+/* --- 2. НАВИГАЦИЯ (ДЕКСТОП) --- */
+.desktop-nav {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    border-radius: 50px;
+}
+
+.nav-link {
+    padding: 8px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 50px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover { color: white; }
+.nav-link.active { background: rgba(255, 255, 255, 0.2); color: white; }
+
+/* --- 3. КНОПКИ (GLASS EFFECT) --- */
+.glass-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    color: white;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glass-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+.icon-btn {
+    padding: 10px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    background-color: #f87171;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #f87171;
+}
+
+/* --- 4. КОШЕЛЕК И ВЫПАДАЮЩЕЕ МЕНЮ ПРОФИЛЯ --- */
+.wallet-wrapper {
+    position: relative;
+}
+
+.app-header .connect-btn {
+    gap: 8px !important;
+    padding: 6px 12px 6px 14px !important;
+    font-weight: 600;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    min-height: 40px;
+}
+
+.wallet-avatar {
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    object-fit: cover !important;
+}
+
+.wallet-address-text {
+    font-family: 'JetBrains Mono', monospace;
+    color: white !important;
+    font-size: 0.9rem !important;
+}
+
+.profile-dropdown-wrapper {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    padding-top: 12px;
+    z-index: 1100;
+}
+
+.profile-dropdown-menu {
+    width: 480px;
+    background: linear-gradient(135deg, rgba(4, 20, 45, 0.97) 0%, rgba(0, 55, 75, 0.95) 45%, rgba(6, 16, 50, 0.97) 100%);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(0, 212, 170, 0.22) !important;
+    border-radius: 20px !important;
+    padding: 24px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+    animation: slideInGlass 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideInGlass {
+    from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.profile-dropdown-avatar { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.2); }
+.profile-dropdown-label { font-size: 0.7rem; color: #2dd4bf; text-transform: uppercase; font-weight: 800; letter-spacing: 1.5px; }
+.profile-address-full { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: white; }
+
+.profile-balance-section, .profile-pending-balance, .profile-fee-lvl {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px; margin-bottom: 8px;
+}
+
+.balance-label, .pending-label, .fee-label {
+    color: rgba(255, 255, 255, 0.9); /* Сделали ярче, почти чистый белый */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.balance-value { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; color: #2dd4bf; }
+.balance-pending { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600; color: #f59e0b; }
+.fee-lvl { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600; color: white; }
+
+.dropdown-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent); margin: 16px 0; }
+
+.dropdown-item {
+    width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+    color: white; font-size: 0.95rem; font-weight: 500; border-radius: 12px; cursor: pointer; transition: all 0.2s; margin-bottom: 8px;
+}
+.dropdown-item:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); transform: translateX(4px); }
+.dropdown-item.text-red { color: #f87171; border-color: rgba(248, 113, 113, 0.1); }
+.dropdown-item.text-red:hover { background: rgba(248, 113, 113, 0.1); border-color: rgba(248, 113, 113, 0.3); }
+
+/* --- 5. ЕДИНЫЙ БЛОК ДЕЙСТВИЙ (HEADER ACTIONS) --- */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mobile-menu-btn {
+    display: none !important; /* На десктопе скрыт */
+}
+
+/* --- 6. АДАПТИВ (ПЛАНШЕТЫ И ТЕЛЕФОНЫ) --- */
+@media (max-width: 1024px) {
+    /* Прячем навигацию и колокольчик */
+    .desktop-nav, .desktop-only { display: none !important; }
+
+    /* Показываем бургер */
+    .mobile-menu-btn {
+        display: flex !important;
+        padding: 8px;
+        border-radius: 12px;
+        z-index: 2000;
+    }
+
+    /* Уменьшаем кнопку кошелька, чтобы всё влезло в шапку */
+    .app-header .connect-btn {
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+    }
+    .wallet-address-text {
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Выпадающее меню профиля (кошелька) сжимаем под ширину телефона */
+    .header-container {
+        padding: 0 16px;
+        height: 64px;
+    }
+
+    /* 🔥 ЖЕЛЕЗОБЕТОННЫЙ ФИКС МЕНЮ ПРОФИЛЯ 🔥 */
+    .profile-dropdown-wrapper {
+        position: fixed !important;
+        top: 64px !important; /* Ровно под мобильным хедером */
+        left: 50% !important; /* Ставим точку отсчета ровно по центру экрана */
+        transform: translateX(-50%) !important; /* Сдвигаем назад на половину своей ширины (идеальный центр) */
+
+        width: calc(100vw - 32px) !important; /* Ширина экрана минус отступы по 16px с боков */
+        max-width: 380px !important; /* Не даем растягиваться слишком сильно на планшетах */
+
+        padding: 10px 0 0 0 !important;
+        z-index: 9999 !important;
+    }
+
+    .profile-dropdown-menu {
+        width: 100% !important; /* Занимает всю доступную ширину враппера */
+        min-width: unset !important;
+        max-width: unset !important;
+        right: auto !important;
+        left: auto !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* --- 7. МОБИЛЬНОЕ ВЫПАДАЮЩЕЕ МЕНЮ (ПОД ХЕДЕРОМ) --- */
+.mobile-dropdown {
+    position: fixed;
+    top: 76px; /* Строго под хедером */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 76px);
+
+    /* Твой фирменный градиент */
+    background: linear-gradient(135deg, rgba(6, 95, 70, 0.95) 0%, rgba(8, 145, 178, 0.95) 50%, rgba(21, 94, 117, 0.95) 100%);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    padding-top: 40px;
+
+    z-index: 990;
+    animation: fadeInMenu 0.3s ease-out;
+}
+
+@keyframes fadeInMenu {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Ссылки-кнопки в мобильном меню */
+.mobile-link {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none !important;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 85%;
+}
+
+.mobile-link:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.mobile-link.active {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+}
+
+/* Убираем рамку выделения на мобилках */
+.mobile-dropdown *:focus, .app-header *:focus {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================
+   8. ФИКС ГАЙДА С ПАЦИ НА МОБИЛКЕ
+========================================= */
+@media (max-width: 768px) {
+    /* 1. Главная карточка гайда */
+    .guide-glass-modal {
+        width: 90vw !important;
+        max-width: 360px !important;
+
+        /* 🔥 УБИВАЕМ координаты из JS и ставим строго по центру экрана */
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+
+        padding: 24px 20px !important;
+        border-radius: 24px !important;
+    }
+
+    /* Прячем стрелочку на мобилке (ссылки в бургере, указывать не на что) */
+    .guide-arrow-up {
+        display: none !important;
+    }
+
+    /* 2. Выстраиваем акулу и текст в КОЛОНКУ */
+    .guide-content-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 16px !important;
+    }
+
+    /* 3. Оформляем блок с акулой */
+    .mascot-container {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        border-right: none !important; /* Убираем вертикальную полосу-разделитель */
+        padding-right: 0 !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Уменьшаем саму картинку Паци */
+    .mascot-avatar-img {
+        width: 130px !important;
+        height: auto !important;
+        min-width: 130px !important;
+    }
+
+    /* 4. Центрируем текстовый блок */
+    .guide-text-area {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    /* Заголовок с иконкой по центру */
+    .guide-header {
+        justify-content: center !important;
+        width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+
+    .guide-title {
+        font-size: 1.4rem !important;
+        text-align: center !important;
+    }
+
+    .guide-description {
+        font-size: 0.95rem !important;
+        text-align: center !important;
+        line-height: 1.5 !important;
+    }
+
+    /* Кнопка Follow X по центру */
+    .btn-x-follow {
+        margin: 16px auto !important;
+    }
+
+    /* 5. Кнопки навигации снизу (Skip, точки, Next) */
+    .guide-actions {
+        width: 100% !important;
+        justify-content: space-between !important;
+        margin-top: 20px !important;
+        padding-top: 16px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+}

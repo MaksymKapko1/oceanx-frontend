@@ -1,0 +1,278 @@
+* {
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. ВЕРХНИЕ КАРТОЧКИ (SummaryCards)
+========================================= */
+.stats-grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin-top: -20px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'JetBrains Mono', monospace, sans-serif;
+}
+
+/* Акцентные цвета текстов */
+.text-green { color: #4ade80; }
+.text-gold { color: #facc15; }
+.text-cyan { color: #22d3ee; }
+.text-violet { color: #8b5cf6; }
+
+/* =========================================
+   2. СЕТКА ГРАФИКОВ (Общий контейнер)
+========================================= */
+.charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.chart-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.chart-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: white;
+}
+
+/* =========================================
+   3. TREEMAP (Квадраты объемов)
+========================================= */
+.treemap-container {
+    display: flex;
+    width: 100%;
+    height: 300px;
+    gap: 6px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.treemap-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 100%;
+}
+
+.treemap-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    color: white;
+    overflow: hidden;
+    padding: 4px;
+    transition: filter 0.2s ease, transform 0.2s ease;
+    cursor: default;
+    container-type: size;
+}
+
+.treemap-box:hover {
+    filter: brightness(1.1);
+}
+
+.tm-symbol {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.tm-value {
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.8;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.treemap-col .tm-value { display: none; }
+
+.treemap-col .tm-symbol {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+}
+
+@container (max-height: 20px) {
+    .treemap-col .tm-symbol { display: none; }
+}
+
+/* =========================================
+   4. OPEN INTEREST (Полоски графиков)
+========================================= */
+.chart-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.chart-bars-scroll-wrapper {
+    max-height: 295px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.chart-bars-scroll-wrapper::-webkit-scrollbar { width: 4px; }
+.chart-bars-scroll-wrapper::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 10px; }
+.chart-bars-scroll-wrapper::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 10px; }
+.chart-bars-scroll-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.6); }
+
+.bar-row {
+    height: 38px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bar-label {
+    width: 60px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: right;
+}
+
+.bar-track {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 24px;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease-out;
+}
+
+.bg-orange { background-color: #f97316; }
+.bg-blue { background-color: #5b7fff; }
+
+.bar-value {
+    margin-left: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* =========================================
+   5. КАСТОМНЫЙ ТУЛТИП
+========================================= */
+.custom-treemap-tooltip {
+    pointer-events: none;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tooltip-symbol { font-size: 0.9rem; font-weight: 700; color: white; letter-spacing: 0.5px; }
+.tooltip-value { font-size: 0.8rem; font-weight: 500; color: rgba(255, 255, 255, 0.6); font-family: 'JetBrains Mono', monospace; }
+
+/* =========================================
+   6. ИДЕАЛЬНАЯ АДАПТИВНОСТЬ (Мобилки и Планшеты)
+========================================= */
+
+@media (max-width: 1200px) {
+    .stats-grid-container { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .treemap-container { height: 250px; }
+}
+
+@media (max-width: 768px) {
+    /* Верхние статы (ВСЕГДА 2 колонки на мобилках) */
+    .stats-grid-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-label {
+        font-size: 0.75rem; /* Чуть меньше шрифт заголовка, чтобы влезал */
+    }
+
+    .stat-value {
+        font-size: 1.15rem; /* Цифры чуть меньше, чтобы не ломали карточку */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Графики на маленьких телефонах */
+    .chart-card {
+        padding: 16px;
+    }
+
+    /* Убираем 1fr для статс-контейнера, чтобы он оставался 2x2, как в правиле выше */
+}
