@@ -1,16 +1,35 @@
 import React, { useState } from 'react';
 import { Bell, Menu, X, BookOpen } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { ArrowLeftRight } from 'lucide-react';
 import WalletConnectButton from './WalletConnectButton';
+import BridgeModal from "./BridgeModal/BridgeModal.jsx";
 import './AppHeader.css';
+import {usePrivy} from "@privy-io/react-auth";
 
 export default function AppHeader() {
+    const { user } = usePrivy();
+    const walletAddress = user?.wallet?.address;
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
+
+    const [isBridgeOpen, setIsBridgeOpen] = useState(false);
 
     const getLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link';
     const getMobileLinkClass = ({ isActive }) => isActive ? "mobile-link active" : "mobile-link";
 
     const closeMenu = () => setIsMobileMenuOpen(false);
+
+    const handleTutorialClick = () => {
+        if (location.pathname === '/copytrading') {
+            // Запускаем специфичный гайд для копитрейдинга
+            window.dispatchEvent(new Event('open-copy-guide'));
+        } else {
+            // Запускаем общий гайд сайта
+            window.dispatchEvent(new Event('open-guide'));
+        }
+    };
 
     return (
         <header className="app-header">
@@ -38,9 +57,17 @@ export default function AppHeader() {
                     <button
                         className="glass-btn icon-btn"
                         title="Show Tutorial"
-                        onClick={() => window.dispatchEvent(new Event('open-guide'))}
+                        onClick={handleTutorialClick}
                     >
                         <BookOpen size={20} />
+                    </button>
+
+                    <button
+                        className="glass-btn icon-btn desktop-only"
+                        title="Bridge / Deposit"
+                        onClick={() => setIsBridgeOpen(true)}
+                    >
+                        <ArrowLeftRight size={20} />
                     </button>
 
                     {/* Колокольчик (Скрываем на мобилках) */}
@@ -72,6 +99,13 @@ export default function AppHeader() {
                     <NavLink to="/stats" className={getMobileLinkClass} onClick={closeMenu}>Stats</NavLink>
                     <NavLink to="/heatmaps" className={getMobileLinkClass} onClick={closeMenu}>Heatmaps</NavLink>
                 </div>
+            )}
+
+            {isBridgeOpen && (
+                <BridgeModal
+                    onClose={() => setIsBridgeOpen(false)}
+                    recipientAddress={walletAddress}  // прокинуть walletAddress через пропс или usePrivy
+                />
             )}
         </header>
     );

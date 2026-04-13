@@ -1,0 +1,72 @@
+.follow-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 12px;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.follow-btn:hover {
+    background: #6366f1;
+    transform: translateY(-1px);
+}
+
+.follow-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.follow-btn.followed {
+    background: transparent;
+    border: 1px solid #4ade80;
+    color: #4ade80;
+}
+
+.lb-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================================
+   ДОБАВЛЕННЫЕ ПРАВИЛА ДЛЯ UNFOLLOW
+   ========================================= */
+
+/* 1. Делаем кнопку красной при наведении */
+.follow-btn.followed:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* 2. Прячем слово "Following" (которое лежит в span) */
+.follow-btn.followed:hover span {
+    display: none;
+}
+
+/* 3. Показываем слово "Unfollow" */
+.follow-btn.followed:hover::after {
+    content: "Unfollow";
+}
+
+/* Кнопка анти-копирования */
+.follow-btn.anti {
+    background: #f87171; /* Красная кнопка для опасного режима */
+    color: #0f172a;
+}
+
+.follow-btn.anti:hover {
+    background: #ef4444;
+}
+
+.follow-btn.anti.followed {
+    background: transparent;
+    border: 1px solid #f87171;
+    color: #f87171;
+}

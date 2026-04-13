@@ -6,8 +6,11 @@ import CopyTradingPage from "./pages/CopyTradingPage.jsx";
 import HeatmapPage from "./pages/HeatmapPage.jsx";
 import OnboardingGuide from "./components/OnboardGuide/OnboardingGuide.jsx";
 import React from "react";
+import {useAuthSync} from "./hooks/useAuthSync.js";
 
 function App() {
+    useAuthSync();
+
     return (
             <>
                 <AppHeader />

@@ -1,18 +1,30 @@
+import React from 'react';
 import LeaderboardTable from "../components/LeaderboardTable.jsx";
+import MySubscriptions from '../components/MySubscriptions.jsx';
+import UserTradingSection from '../components/UserTradingSection.jsx';
+import OpenPositionsSection from '../components/OpenPositionsSection.jsx';
+import GuideCopyTrading from "../components/CopyTradeGuide/GuideCopyTrading.jsx";
+import './CopyTradingPage.css';
 
-function CopyTradingPage() {
-    console.log('CopyTradingPage рендерится')
+export default function CopyTradingPage() {
     return (
-        <div style={{
-            minHeight: '100vh',
-            background: 'linear-gradient(135deg, #065f46 0%, #0891b2 50%, #155e75 100%)',
-            color: 'white',
-            paddingTop: '100px',  // ← вот это
-            paddingBottom: '50px'
-        }}>
-            <LeaderboardTable />
-        </div>
-    )
-}
+        <div className="copy-trading-page">
+            <GuideCopyTrading />
 
-export default CopyTradingPage;
+            <main className="copy-content-grid">
+                <section className="copy-main-column" id="step-traders">
+                    <LeaderboardTable />
+                </section>
+
+                <aside className="copy-sidebar-column" id="step-settings">
+                    <UserTradingSection />
+                    <MySubscriptions />
+                </aside>
+            </main>
+
+            <header className="copy-top-header" id="step-positions">
+                <OpenPositionsSection />
+            </header>
+        </div>
+    );
+}

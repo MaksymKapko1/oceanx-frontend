@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { ChevronRight, X, Sparkles, TrendingUp, BarChart2, SkipForward, Map } from 'lucide-react';
 import './OnboardingGuide.css';
 import paciSharkImg from '../../assets/paci-shark.png';
@@ -14,7 +14,7 @@ const GUIDE_STEPS = [
         title: "Market Stats",
         text: "Here you'll find full market statistics. Volumes, liquidations, and open interest update in real-time. This will help you understand market depth, spot broad trends across top markets, and make informed decisions.",
         icon: <BarChart2 size={28} className="step-icon text-purple" />,
-        targetId: "step-market-stats", // ID элемента, к которому прилипнет гайд
+        targetId: "step-market-stats",
     },
     {
         title: "Copy Trading",

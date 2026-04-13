@@ -1,0 +1,234 @@
+.trading-settings-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding: 20px 0;
+    box-sizing: border-box;
+    width: 100%;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.settings-scroll-container {
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.settings-scroll-container::-webkit-scrollbar {
+    width: 3px;
+}
+.settings-scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.settings-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(74, 222, 128, 0.1);
+    border-radius: 10px;
+}
+.settings-scroll-container:hover::-webkit-scrollbar-thumb {
+    background: rgba(74, 222, 128, 0.3);
+}
+
+.settings-title {
+    margin: 0 0 20px 0;
+    font-size: 1.1rem;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.leverage-warning {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-left: 8px;
+    font-weight: 400;
+    transition: color 0.3s;
+}
+
+.leverage-warning.high-risk {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+/* Balance card — label слева, значение справа */
+.balance-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.balance-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+.balance-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.setting-item {
+    margin-bottom: 20px;
+}
+
+.setting-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+}
+
+.label-with-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mode-toggle {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.mode-toggle button {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.mode-toggle button.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #4ade80;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.numeric-input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #4ade80;
+    padding: 6px 10px;
+    width: 60px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.numeric-input.wide {
+    width: 100px;
+    font-size: 14px;
+}
+
+.usd-hint {
+    color: #4ade80;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.info-text {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    margin: -4px 0 10px 0;
+}
+
+.setting-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    outline: none;
+}
+
+.setting-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    background: #4ade80;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+}
+
+.leverage-disclaimer {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    margin: 8px 0 0 0;
+    line-height: 1.5;
+}
+
+.save-settings-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 14px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.save-settings-btn:hover {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    color: white;
+}
+
+.save-settings-btn.success {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border-color: #4ade80;
+}
+
+.markets-dropdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.market-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+}

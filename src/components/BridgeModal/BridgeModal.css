@@ -1,0 +1,88 @@
+.bridge-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 15, 25, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 5000;
+    display: flex;
+    align-items: flex-start;   /* ← старт сверху, не центр */
+    justify-content: center;
+    padding: 90px 16px 16px;   /* ← 90px = хедер сайта + зазор */
+    overflow-y: auto;          /* ← если не влезает — скроллится */
+}
+
+.bridge-modal {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(8, 15, 25, 1) 100%);
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    border-radius: 24px;
+    width: 420px;
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    animation: bridgeSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;            /* ← не сжимается flex-ом */
+}
+
+@keyframes bridgeSlideUp {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.bridge-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-shrink: 0;
+}
+
+.bridge-modal-title {
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.bridge-close-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bridge-close-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
+.bridge-iframe-wrapper {
+    line-height: 0;
+}
+
+.bridge-iframe-wrapper iframe {
+    display: block;
+    width: 100%;
+    height: 581px;
+    border: none;
+}
+
+@media (max-width: 768px) {
+    .bridge-overlay {
+        padding: 80px 0 0;
+        align-items: flex-start;
+    }
+
+    .bridge-modal {
+        width: 100%;
+        border-radius: 20px 20px 0 0;
+    }
+}

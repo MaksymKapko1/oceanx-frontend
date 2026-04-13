@@ -1,0 +1,290 @@
+.user-positions-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Скролл-контейнер: он остается 100%, но позволяет внутренностям быть шире */
+.user-positions-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+/* Сетка: ВАЖНО убрать width: 100% и поставить min-width */
+.positions-header, .positions-row {
+    display: grid;
+    /* Используем minmax, чтобы колонки имели минимальный размер */
+    grid-template-columns:
+        minmax(100px, 1fr)
+        minmax(80px, 0.7fr)
+        minmax(100px, 1fr)
+        minmax(130px, 1.3fr)
+        minmax(130px, 1.3fr)
+        minmax(110px, 1.1fr)
+        minmax(110px, 1.1fr)
+        minmax(130px, 1.3fr);
+    gap: 15px;
+    align-items: center;
+    min-width: 1100px; /* Вот это не даст таблице "сжиматься" */
+}
+
+.positions-header {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.positions-row {
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+}
+
+/* Скроллбар делаем тонким и стильным */
+.user-positions-scroll-container::-webkit-scrollbar { height: 4px; }
+.user-positions-scroll-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+/* ... твой текущий код OpenPositionsSection.css остается, добавь это вниз: ... */
+
+.section-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.panic-close-btn {
+    background: #f87171;
+    color: #1a1e26;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(248, 113, 113, 0.25);
+    font-family: inherit;
+}
+
+.panic-close-btn:hover {
+    background: #ef4444;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(248, 113, 113, 0.4);
+}
+.pnl-cell.profit { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
+.pnl-cell.loss { color: #f87171; }
+.mark-price { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; }
+.pos-count { background: #4ade80; color: #000; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-size: 0.8rem; }
+
+/* Делаем сетку на 5 колонок */
+.positions-header, .positions-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; /* 5 равных колонок */
+    align-items: center;
+    padding: 12px 0;
+}
+
+/* Символ и тег LONG/SHORT */
+.pos-symbol {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-weight: bold;
+    color: #fff;
+}
+.tag-long { background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 2px 4px; border-radius: 4px; font-size: 10px; width: fit-content;}
+.tag-short { background: rgba(248, 113, 113, 0.2); color: #f87171; padding: 2px 4px; border-radius: 4px; font-size: 10px; width: fit-content;}
+
+/* Цены в столбик */
+.price-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.mark-live { color: rgba(255, 255, 255, 0.4); font-size: 0.85rem; }
+
+/* Цвета для ликвидации и PNL */
+.liq-price { color: #fbbf24; }
+.pnl-cell.profit { color: #4ade80; font-weight: bold; }
+.pnl-cell.loss { color: #f87171; font-weight: bold; }
+
+/* --- КНОПКА ПОДЕЛИТЬСЯ --- */
+.pnl-share-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pnl-share-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #2dd4bf;
+}
+
+/* --- МОДАЛКА КАРТОЧКИ --- */
+.pnl-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 15, 25, 0.85); /* Чуть плотнее фон, чтобы фокус был на карточке */
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Прижимаем к верху... */
+    padding-top: 15vh; /* ...и опускаем на 15% экрана (будет висеть повыше) */
+}
+
+.pnl-modal-content {
+    background: #0f172a;
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    max-width: 560px; /* 👈 Сделали шире и более растянутой (было 400px) */
+    width: 95%;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6); /* Добавили солидную тень */
+}
+
+.pnl-modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.pnl-modal-close:hover {
+    color: white;
+}
+
+/* --- САМА КАРТОЧКА (ТО ЧТО ПОЙДЕТ В КАРТИНКУ) --- */
+.pnl-share-card {
+    padding: 35px 45px; /* 👈 Раздвинули внутренние отступы, чтобы текст дышал */
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+}
+/* Фоны: зеленый для плюса, красный для минуса */
+.pnl-share-card.profit-bg {
+    background: linear-gradient(135deg, #0a1628 0%, #064e3b 100%);
+}
+.pnl-share-card.loss-bg {
+    background: linear-gradient(135deg, #0a1628 0%, #450a0a 100%);
+}
+
+.pnl-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pnl-logo {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #2dd4bf;
+}
+
+.pnl-pair {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.pnl-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.pnl-roi-big {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.text-green { color: #4ade80; }
+.text-red { color: #f87171; }
+
+.pnl-usd-val {
+    font-size: 1.2rem;
+    opacity: 0.8;
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.pnl-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+}
+
+.pnl-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.pnl-stat span { opacity: 0.6; }
+.pnl-stat strong { font-size: 1rem; font-family: 'JetBrains Mono', monospace; }
+
+.pnl-qr-placeholder {
+    font-weight: bold;
+    opacity: 0.5;
+    letter-spacing: 1px;
+}
+
+/* --- КНОПКА СКАЧИВАНИЯ --- */
+.pnl-download-btn {
+    background: #2dd4bf;
+    color: #0f172a;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.pnl-download-btn:hover {
+    background: #5eead4;
+}
