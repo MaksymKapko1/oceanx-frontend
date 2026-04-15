@@ -64,7 +64,7 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
             // 4. Выполняем подписку/отписку
             const endpoint = followed ? '/api/copy/unfollow' : '/api/copy/follow';
 
-            const data = await privateFetch(`${baseUrl}${endpoint}`, {
+            const response = await privateFetch(`${baseUrl}${endpoint}`, {
                 method: 'POST',
                 body: JSON.stringify({
                     master_wallet: masterAddress,
@@ -73,6 +73,7 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
                     is_reverse: isReverse
                 })
             }, () => identityToken);
+            const data = await response.json();
 
             if (data.success) {
                 const newStatus = !followed;
