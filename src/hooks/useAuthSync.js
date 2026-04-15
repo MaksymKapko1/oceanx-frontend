@@ -1,9 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
+import { useIdentityToken, getIdentityToken } from "@privy-io/react-auth";
+import { privateFetch } from '../utils/pacificaUtils';
 
 export function useAuthSync() {
-    const { ready, authenticated, user } = usePrivy();
+    const { ready, authenticated, user, getAccessToken } = usePrivy();
     const hasSynced = useRef(false);
+    const { identityToken } = useIdentityToken();
 
     useEffect(() => {
         if (ready && !authenticated) {
@@ -17,11 +20,10 @@ export function useAuthSync() {
                 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
                 try {
-                    const res = await fetch(`${baseUrl}/api/auth/connect`, {
+                    const res = await privateFetch(`${baseUrl}/api/auth/connect`, {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({wallet_address: walletAddress}),
-                    })
+                        body: JSON.stringify({}),
+                    }, () => identityToken)
                     const data = await res.json();
                     if (data.success) {
                         console.log('✅ Юзер успешно сохранен в БД:', data.user);

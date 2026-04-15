@@ -1,14 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import './UserTradingSection.css';
-import { usePrivy } from "@privy-io/react-auth";
+import {usePrivy} from "@privy-io/react-auth";
 import { usePacificaAccount } from "../hooks/usePacificaAccount";
 import { useMarketStats } from '../hooks/useMarketStats';
+import { useIdentityToken, getIdentityToken } from "@privy-io/react-auth";
+import { privateFetch } from '../utils/pacificaUtils';
 
 export default function UserTradingSection() {
-    const { authenticated, user } = usePrivy();
+    const { authenticated, user, getAccessToken } = usePrivy();
     const walletAddress = user?.wallet?.address;
 
-    // ✅ Убрали marginAllocation, leverage — только volume_per_trade_usd
+    const { identityToken } = useIdentityToken();
+
     const [volumePerTrade, setVolumePerTrade] = useState(50);
     const [slippage, setSlippage]             = useState(1);
     const [maxExposure, setMaxExposure]       = useState(500);
@@ -28,7 +31,6 @@ export default function UserTradingSection() {
             accountData?.available_to_spend ? parseFloat(accountData.available_to_spend) : 0
         , [accountData]);
 
-    // Показываем сколько сделок максимум влезет в лимит
     const maxPositions = useMemo(() => {
         if (volumePerTrade <= 0) return 0;
         return Math.floor(maxExposure / volumePerTrade);
@@ -46,6 +48,7 @@ export default function UserTradingSection() {
         const fetchSettings = async () => {
             if (!authenticated || !walletAddress) { setIsLoading(false); return; }
             try {
+                const authToken = await getAccessToken();
                 const res  = await fetch(`${baseUrl}/api/user/settings/${walletAddress}`);
                 const data = await res.json();
                 if (data.success && data.settings) {
@@ -70,17 +73,15 @@ export default function UserTradingSection() {
         setSaveStatus(null);
         try {
             const payload = {
-                user_wallet:            walletAddress,
-                volume_per_trade_usd:   parseFloat(volumePerTrade),
-                slippage:               parseFloat(slippage),
-                allowed_markets:        allowedMarkets,
+                volume_per_trade_usd: parseFloat(volumePerTrade),
+                slippage: parseFloat(slippage),
+                allowed_markets: allowedMarkets,
                 max_total_exposure_usd: parseFloat(maxExposure),
             };
-            const res = await fetch(`${baseUrl}/api/user/settings`, {
+            const res = await privateFetch(`${baseUrl}/api/user/settings`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
-            });
+            }, () => identityToken);
             setSaveStatus(res.ok ? 'success' : 'error');
             if (!res.ok) console.error("Save error:", await res.json());
         } catch (e) {

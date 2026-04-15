@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Copy, Wallet, TrendingUp, Map, BarChart2 } from 'lucide-react';
+import {ArrowRight, Copy, Wallet, TrendingUp, Map, BarChart2, FireExtinguisherIcon, FlameIcon} from 'lucide-react';
 import { NavLink, Link } from 'react-router-dom';
 import './MainPage.css';
 import OnboardingGuide from "../components/OnboardGuide/OnboardingGuide.jsx";
@@ -27,14 +27,21 @@ export default function MainPage() {
         },
         {
             title: "Heatmaps",
-            icon: <Map size={32} className="feature-icon text-orange" />,
+            icon: <Map size={32} className="feature-icon text-green" />,
             desc: "Gain a bird's-eye view of the market. Visualize liquidity clusters, whale activity, and price intensity across all 60+ Pacifica trading pairs.",
             path: "/heatmaps", // 🔥 Роут для хитмапов
             actionText: "Open Heatmaps"
         },
         {
+            title: "Liquidations",
+            icon: <FlameIcon size={32} className="feature-icon text-orange" />,
+            desc: "Monitor the market's pressure points. Track real-time forced liquidations and leverage wipeouts across all pairs to spot volatility spikes and potential reversals.",
+            path: "/liquidations", // 🔥 Роут для хитмапов
+            actionText: "Open Liquidations"
+        },
+        {
             title: "Hedge Farm Funding",
-            icon: <Wallet size={32} className="feature-icon text-green" />,
+            icon: <Wallet size={32} className="feature-icon text-red" />,
             desc: "Maximize your capital efficiency through automated yield strategies and diversified hedge protocols. Institutional-grade fund management, decentralized.",
             path: "#", // Заглушка, пока страница не готова
             actionText: "Coming Soon"
@@ -58,7 +65,7 @@ export default function MainPage() {
 
                     {/* ЛЕВАЯ КОЛОНКА: Текст и Кнопки */}
                     <div className="hero-text-content">
-                        <div className="hero-badge">Welcome to the future of DeFi</div>
+                        {/*<div className="hero-badge">Welcome to the future of DeFi</div>*/}
                         <h1 className="hero-title">
                             Dive into <span className="text-gradient">OceanX</span>
                         </h1>

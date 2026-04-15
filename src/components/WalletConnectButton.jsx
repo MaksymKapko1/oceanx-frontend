@@ -191,10 +191,10 @@ export default function WalletConnectButton({ isMobile = false, onClick }) {
 
                         <div className="dropdown-divider"></div>
 
-                        <button className="dropdown-item">
-                            <User size={16} />
-                            <span>Profile & Stats</span>
-                        </button>
+                        {/*<button className="dropdown-item">*/}
+                        {/*    <User size={16} />*/}
+                        {/*    <span>Profile & Stats</span>*/}
+                        {/*</button>*/}
 
                         <button className="dropdown-item text-red" onClick={handleLogout}>
                             <LogOut size={16} />

@@ -17,3 +17,15 @@ export function prepareMessage(header, payload) {
     const sortedData = sortObjectKeys(dataToSign);
     return JSON.stringify(sortedData);
 }
+
+export const privateFetch = async (url, options = {}, getIdentityToken) => {
+    const token = await getIdentityToken();
+    return fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+};

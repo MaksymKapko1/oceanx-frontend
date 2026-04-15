@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { useAgentWallet } from "../../hooks/useAgentWallet.js";
 import './FollowButton.css';
+import { useIdentityToken } from "@privy-io/react-auth";
+import { privateFetch} from "../../utils/pacificaUtils.js";
 
 export default function FollowButton({ masterAddress, initialFollowed, onToggle, isReverse }) {
-    // Достаем linkWallet для принудительной привязки Phantom
+
     const { authenticated, user, login, linkWallet } = usePrivy();
     const { bindAndSaveAgent } = useAgentWallet();
     const [loading, setLoading] = useState(false);
     const [followed, setFollowed] = useState(initialFollowed || false);
+    const { identityToken } = useIdentityToken();
 
     useEffect(() => {
         setFollowed(initialFollowed);
@@ -23,6 +26,7 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
         }
 
         try {
+
             setLoading(true);
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
@@ -59,17 +63,15 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
             // 4. Выполняем подписку/отписку
             const endpoint = followed ? '/api/copy/unfollow' : '/api/copy/follow';
 
-            const response = await fetch(`${baseUrl}${endpoint}`, {
+            const response = await privateFetch(`${baseUrl}${endpoint}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_wallet: userWallet,
                     master_wallet: masterAddress,
                     copy_amount: 100.0,
                     max_leverage: 10,
                     is_reverse: isReverse
                 })
-            });
+            }, () => identityToken);
 
             const data = await response.json();
 

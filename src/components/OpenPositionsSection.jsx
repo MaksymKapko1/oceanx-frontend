@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './OpenPositionsSection.css';
 import { createPortal } from 'react-dom';
-import { usePrivy } from "@privy-io/react-auth";
+import {usePrivy} from "@privy-io/react-auth";
 import { usePacificaAccount } from "../hooks/usePacificaAccount";
 import { Share2, Download, X } from 'lucide-react'; // 👈 Добавили иконки
 import html2canvas from 'html2canvas'; // 👈 Добавили генератор картинок
+import { useIdentityToken, getIdentityToken } from "@privy-io/react-auth";
+import { privateFetch } from '../utils/pacificaUtils';
 
 const WS_URL = "wss://ws.pacifica.fi/ws";
 
 export default function OpenPositionsSection() {
     const { user } = usePrivy();
+
     const walletAddress = user?.wallet?.address;
 
     const [positions, setPositions] = useState([]);
@@ -96,6 +99,54 @@ export default function OpenPositionsSection() {
         }
     };
 
+    const closePosition = async (pos) => {
+        if (!window.confirm(`Are you sure you want to close ${pos.s}?`)) return;
+
+        try {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+            const response = await privateFetch(
+                `${baseUrl}/api/manual-trades/close`,
+                {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                symbol: pos.s
+                            })
+            }, getIdentityToken);
+
+            const data = await response.json();
+            if (!response.ok) {
+                console.error("❌ Error closing position:", data.detail);
+                alert(`Error: ${data.detail}`);
+            } else {
+                console.log(`✅ Success: ${pos.s} closed`);
+            }
+        } catch (error) {
+            console.error("Network error:", error);
+        }
+    };
+
+    const closeAllPositions = async () => {
+        if (!window.confirm(`🚨 Are you sure you want to close ALL ${positions.length} positions?`)) return;
+
+        try {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+            const response = await privateFetch(`${baseUrl}/api/manual-trades/close-all`, {
+                method: 'POST',
+                body: JSON.stringify({})
+            }, getIdentityToken);
+
+            const data = await response.json();
+            if (!response.ok) {
+                console.error("❌ Error closing all:", data.detail);
+                alert(`Error: ${data.detail}`);
+            } else {
+                console.log("✅ Success: All positions closing initiated");
+            }
+        } catch (error) {
+            console.error("Network error:", error);
+        }
+    };
+
     return (
         <div className="user-positions-section">
             <h3 className="section-title">
@@ -173,6 +224,14 @@ export default function OpenPositionsSection() {
                                     >
                                         <Share2 size={16} />
                                     </button>
+
+                                    <button
+                                        className="pos-close-btn"
+                                        onClick={() => closePosition(pos)}
+                                        style={{ color: '#ff4d4d', background: 'none', border: 'none', cursor: 'pointer' }}
+                                    >
+                                        <X size={18} />
+                                    </button>
                                 </div>
                             </div>
                         );
@@ -181,7 +240,13 @@ export default function OpenPositionsSection() {
             </div>
 
             <div className="section-footer">
-                <button className="panic-close-btn" onClick={() => {}}>Close ALL Positions</button>
+                <button
+                    className="panic-close-btn"
+                    onClick={closeAllPositions}
+                    disabled={positions.length === 0}
+                >
+                    Close ALL Positions
+                </button>
             </div>
 
             {/* 👈 МОДАЛКА С КАРТОЧКОЙ ДЛЯ СКАЧИВАНИЯ */}
@@ -219,7 +284,7 @@ export default function OpenPositionsSection() {
                                 </div>
                                 <div className="pnl-qr-placeholder">
                                     {/* Сюда можно вставить мини QR код на твой сайт */}
-                                    oceanx.finance
+                                    oceanx
                                 </div>
                             </div>
                         </div>

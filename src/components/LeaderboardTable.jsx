@@ -3,6 +3,8 @@ import { usePrivy } from "@privy-io/react-auth";
 import FollowButton from './FollowButton/FollowButton';
 import { Copy, Check, ShieldAlert, Zap, Info } from 'lucide-react';
 import './LeaderboardTable.css';
+import { useIdentityToken, getIdentityToken } from "@privy-io/react-auth";
+import { privateFetch } from '../utils/pacificaUtils';
 
 const PAGE_SIZE = 10;
 
@@ -17,6 +19,7 @@ export default function LeaderboardTable() {
     const { authenticated, user } = usePrivy();
 
     const [traderStrategies, setTraderStrategies] = useState({});
+    const { identityToken } = useIdentityToken();
 
     const [leaderboard, setLeaderboard] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -61,15 +64,13 @@ export default function LeaderboardTable() {
         if (trader.is_followed && authenticated && user?.wallet?.address) {
             try {
                 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-                const response = await fetch(`${baseUrl}/api/user/update-strategy`, {
+                const response = await privateFetch(`${baseUrl}/api/user/update-strategy`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user_wallet: user.wallet.address,
                         master_wallet: addr,
                         is_reverse: isReverse
                     })
-                });
+                }, () => identityToken);
                 const data = await response.json();
 
                 if (!data.success) {

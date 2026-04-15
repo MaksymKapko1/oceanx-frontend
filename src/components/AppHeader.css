@@ -68,7 +68,7 @@
 
 .icon-btn {
     padding: 10px;
-    border-radius: 12px;
+    border-radius: 50px;
     position: relative;
 }
 
@@ -125,7 +125,7 @@
     backdrop-filter: blur(40px) saturate(200%);
     -webkit-backdrop-filter: blur(40px) saturate(200%);
     border: 1px solid rgba(0, 212, 170, 0.22) !important;
-    border-radius: 20px !important;
+    border-radius: 24px !important;
     padding: 24px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
     animation: slideInGlass 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -146,7 +146,7 @@
 .profile-balance-section, .profile-pending-balance, .profile-fee-lvl {
     display: flex; justify-content: space-between; align-items: center;
     padding: 14px 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px; margin-bottom: 8px;
+    border-radius: 50px; margin-bottom: 8px;
 }
 
 .balance-label, .pending-label, .fee-label {
@@ -392,4 +392,283 @@
         padding-top: 16px !important;
         border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
     }
+}
+
+/* =========================================
+   9. МОДАЛКА АКТИВАЦИИ БИЛДЕРА (OCEANX STYLE)
+========================================= */
+.builder-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Глубокий темный фон морского оттенка */
+    background: rgba(4, 15, 30, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeInModal 0.3s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.builder-modal-content {
+    /* Фирменный морской градиент как в меню профиля */
+    background: linear-gradient(135deg, rgba(4, 20, 45, 0.98) 0%, rgba(0, 55, 75, 0.95) 45%, rgba(6, 16, 50, 0.98) 100%);
+    border: 1px solid rgba(34, 211, 238, 0.3); /* Бирюзовый бордер */
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(34, 211, 238, 0.1);
+    animation: slideInGlass 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Декоративный неоновый блик сверху модалки */
+.builder-modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #22d3ee, transparent);
+    opacity: 0.8;
+}
+
+.builder-modal-icon {
+    margin: 0 auto 24px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(34, 211, 238, 0.1);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+    animation: pulse-ocean 2.5s infinite;
+}
+
+@keyframes pulse-ocean {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(34, 211, 238, 0); filter: drop-shadow(0 0 15px #22d3ee); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
+}
+
+.builder-modal-content h2 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+    font-weight: 800;
+    /* Фирменный градиент текста из Hero секции */
+    background: linear-gradient(to right, #22d3ee, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.builder-modal-content p {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 28px;
+}
+
+.builder-modal-features {
+    text-align: left;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.feature-item {
+    font-size: 0.9rem;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+}
+
+/* Кастомные бирюзовые галочки (убираем эмодзи из HTML!) */
+.feature-item::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: rgba(34, 211, 238, 0.15);
+    color: #22d3ee;
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.builder-activate-btn {
+    width: 100%;
+    padding: 16px;
+    /* Бирюзовый градиент кнопки */
+    background: linear-gradient(90deg, #0891b2, #0284c7);
+    border: 1px solid rgba(34, 211, 238, 0.5);
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+}
+
+.builder-activate-btn:hover:not(:disabled) {
+    background: linear-gradient(90deg, #06b6d4, #0ea5e9);
+    box-shadow: 0 8px 25px rgba(34, 211, 238, 0.4);
+    transform: translateY(-2px);
+}
+
+.builder-activate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.builder-skip-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.builder-skip-btn:hover {
+    color: white;
+}
+
+.nav-dropdown-wrapper {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px; /* Мостик для курсора */
+    margin-bottom: -15px;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px; /* Чуть шире для овальной формы */
+    transition: all 0.3s ease;
+}
+
+.dropdown-trigger.hovered,
+.dropdown-trigger.active {
+    background: rgba(34, 211, 238, 0.15);
+    color: #22d3ee;
+}
+
+.arrow {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+/* ❄️ OCEANX FROST GLASS THEME */
+.oceanx-glass-menu {
+    position: absolute;
+    top: calc(100% - 5px); /* Прижимаем к кнопке */
+    left: 0;
+    min-width: 220px;
+
+    /* 👈 1. Плотный цвет фона (0.9), чтобы ничего не просвечивало */
+    background: rgba(13, 17, 23, 0.92);
+
+    /* 👈 2. Мощный блюр для эффекта глубины */
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    /* 👈 3. Тонкий циановый бортик */
+    border: 1px solid rgba(34, 211, 238, 0.25);
+    border-radius: 16px; /* Софт-квадрат с закруглениями */
+
+    padding: 8px;
+    box-shadow:
+            0 20px 40px rgba(0, 0, 0, 0.6),
+            0 0 20px rgba(34, 211, 238, 0.05);
+    z-index: 9999;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Настройки пунктов меню */
+.glass-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 20px !important; /* 👈 МАКСИМАЛЬНОЕ ЗАКРУГЛЕНИЕ ВЫДЕЛЕНИЯ */
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+}
+/* Ховер на пунктах */
+.glass-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: white;
+    transform: translateX(4px);
+}
+.glass-item:last-child {
+    border-bottom: none;
+}
+
+/* Иконки */
+.icon-cyan { color: #22d3ee; }
+.icon-red { color: #f87171; } /* В цвет твоих шортов/проигрышей */
+.icon-yellow { color: #fbbf24; } /* В цвет твоего бейджа */
+/* Кастомный стиль для Ликвидаций */
+.glass-item:hover .icon-red {
+    transform: scale(1.2);
+}
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+* Группировка кнопок *
+.nav-group-insights {
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 8px !important; /* Уменьшаем внутренние отступы самой кнопки-контейнера */
+}
+
+.nav-link,
+.dropdown-trigger {
+    border-radius: 20px !important; /* Максимальное закругление (Pill shape) */
 }

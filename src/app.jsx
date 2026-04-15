@@ -5,6 +5,7 @@ import MainPage from "./pages/MainPage.jsx";
 import CopyTradingPage from "./pages/CopyTradingPage.jsx";
 import HeatmapPage from "./pages/HeatmapPage.jsx";
 import OnboardingGuide from "./components/OnboardGuide/OnboardingGuide.jsx";
+import LiquidationsPage from "./pages/LiquidationsPage.jsx";
 import React from "react";
 import {useAuthSync} from "./hooks/useAuthSync.js";
 
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/stats" element={<StatsPage />} />
                     <Route path="/heatmaps" element={<HeatmapPage />} />
                     <Route path="/copytrading" element={<CopyTradingPage />} />
+                    <Route path="/liquidations" element={<LiquidationsPage />} />
                 </Routes>
                 <OnboardingGuide/>
             </>

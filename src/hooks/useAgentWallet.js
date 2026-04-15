@@ -1,7 +1,8 @@
 import { useWallets, useSignMessage } from '@privy-io/react-auth/solana';
+import { useIdentityToken, getIdentityToken } from "@privy-io/react-auth";
 import { Keypair } from '@solana/web3.js';
+import { prepareMessage, privateFetch } from '../utils/pacificaUtils';
 import bs58 from 'bs58';
-import { prepareMessage } from '../utils/pacificaUtils';
 
 export function useAgentWallet() {
     const { wallets } = useWallets();
@@ -17,18 +18,11 @@ export function useAgentWallet() {
             const agentPrivateKeyStr = bs58.encode(agentKeypair.secretKey);
 
             const timestamp = Date.now();
-            const messageObj = {
-                data: { agent_wallet: agentPublicKeyStr },
-                expiry_window: 5000,
-                timestamp: timestamp,
-                type: "bind_agent_wallet"
-            };
+            const header = { timestamp, expiry_window: 5000, type: "bind_agent_wallet" };
+            const payload = { agent_wallet: agentPublicKeyStr };
 
-            const messageString = prepareMessage(messageObj.type === undefined ? messageObj : messageObj.header, messageObj.data);
-            const messageBytes = new TextEncoder().encode(prepareMessage(
-                { timestamp, expiry_window: 5000, type: "bind_agent_wallet" },
-                { agent_wallet: agentPublicKeyStr }
-            ));
+            const messageString = prepareMessage(header, payload);
+            const messageBytes = new TextEncoder().encode(messageString);
 
             const { signature } = await signMessage({
                 message: messageBytes,
@@ -36,17 +30,17 @@ export function useAgentWallet() {
             });
 
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-            const response = await fetch(`${baseUrl}/api/auth/save-agent`, {
+            const response = await privateFetch(`${baseUrl}/api/auth/save-agent`,
+                {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    user_wallet: solanaWallet.address,
                     agent_public_key: agentPublicKeyStr,
                     agent_private_key: agentPrivateKeyStr,
                     signature: bs58.encode(signature),
                     timestamp: timestamp
                 })
-            });
+            }, getIdentityToken
+            );
 
             if (!response.ok) {
                 const err = await response.json();

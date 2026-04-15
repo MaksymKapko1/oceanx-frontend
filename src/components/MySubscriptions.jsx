@@ -113,7 +113,7 @@ export default function MySubscriptions() {
                                     >
                                         <XCircle size={16} />
                                     </button>
-                                    <button className="sub-settings-btn">⚙️</button>
+                                    {/*<button className="sub-settings-btn">⚙️</button>*/}
                                 </div>
                             </div>
                         );
