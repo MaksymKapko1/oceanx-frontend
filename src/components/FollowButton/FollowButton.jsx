@@ -9,6 +9,7 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
 
     const { authenticated, user, login, linkWallet } = usePrivy();
     const { bindAndSaveAgent } = useAgentWallet();
+    const { getIdentityToken } = useIdentityToken();
     const [loading, setLoading] = useState(false);
     const [followed, setFollowed] = useState(initialFollowed || false);
     const { identityToken } = useIdentityToken();
@@ -63,7 +64,7 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
             // 4. Выполняем подписку/отписку
             const endpoint = followed ? '/api/copy/unfollow' : '/api/copy/follow';
 
-            const response = await privateFetch(`${baseUrl}${endpoint}`, {
+            const data = await privateFetch(`${baseUrl}${endpoint}`, {
                 method: 'POST',
                 body: JSON.stringify({
                     master_wallet: masterAddress,
@@ -73,15 +74,14 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
                 })
             }, () => identityToken);
 
-            const data = await response.json();
-
             if (data.success) {
                 const newStatus = !followed;
                 setFollowed(newStatus);
                 if (onToggle) onToggle(masterAddress, newStatus);
                 console.log(`✅ Успешно. Теперь Following: ${newStatus}`);
             } else {
-                console.error("❌ Ошибка бэкенда:", data.error);
+                console.error("❌ Полный ответ бэкенда:", data);
+                console.error("❌ Backend Error:", data.error);
                 alert(`Ошибка: ${data.error}`);
             }
         } catch (err) {

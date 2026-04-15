@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { usePrivy } from "@privy-io/react-auth";
 import { Copy, Check, XCircle } from 'lucide-react'; // 👈 Добавили XCircle
+import { getIdentityToken, useIdentityToken } from "@privy-io/react-auth";
 import "./MySybscriptions.css";
+import {privateFetch} from "../utils/pacificaUtils.js";
 
 export default function MySubscriptions() {
     const { authenticated, user } = usePrivy();
+    const { identityToken } = useIdentityToken();
     const [subscriptions, setSubscriptions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [copiedAddress, setCopiedAddress] = useState(null);
+
 
     const fetchSubscriptions = async () => {
         if (!authenticated || !user?.wallet?.address) {
@@ -46,14 +50,12 @@ export default function MySubscriptions() {
 
         try {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-            const res = await fetch(`${baseUrl}/api/copy/unfollow`, {
+            const res = await privateFetch(`${baseUrl}/api/copy/unfollow`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    user_wallet: user.wallet.address,
                     master_wallet: masterAddr
                 })
-            });
+            }, () => identityToken);
             const data = await res.json();
 
             if (data.success) {

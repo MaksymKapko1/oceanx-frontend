@@ -146,7 +146,6 @@ export default function AppHeader() {
             let pacificaResult;
 
             try {
-                pacificaResult = JSON.parse(responseText);
             } catch (e) {
                 pacificaResult = { error: responseText }; // Ловит текстовые ошибки типа "Invalid message"
             }

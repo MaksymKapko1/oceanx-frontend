@@ -5,6 +5,7 @@ import { prepareMessage, privateFetch } from '../utils/pacificaUtils';
 import bs58 from 'bs58';
 
 export function useAgentWallet() {
+    const EXPIRY_WINDOW = 5000
     const { wallets } = useWallets();
     const { signMessage } = useSignMessage();
 
@@ -18,7 +19,7 @@ export function useAgentWallet() {
             const agentPrivateKeyStr = bs58.encode(agentKeypair.secretKey);
 
             const timestamp = Date.now();
-            const header = { timestamp, expiry_window: 5000, type: "bind_agent_wallet" };
+            const header = { timestamp, expiry_window: EXPIRY_WINDOW, type: "bind_agent_wallet" };
             const payload = { agent_wallet: agentPublicKeyStr };
 
             const messageString = prepareMessage(header, payload);
@@ -37,7 +38,8 @@ export function useAgentWallet() {
                     agent_public_key: agentPublicKeyStr,
                     agent_private_key: agentPrivateKeyStr,
                     signature: bs58.encode(signature),
-                    timestamp: timestamp
+                    timestamp: timestamp,
+                    expiry_window: EXPIRY_WINDOW
                 })
             }, getIdentityToken
             );
