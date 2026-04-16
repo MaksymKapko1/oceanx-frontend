@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePrivy } from "@privy-io/react-auth";
 import { Copy, Check, XCircle } from 'lucide-react';
 import { getIdentityToken, useIdentityToken } from "@privy-io/react-auth";
+import { toast } from 'sonner';
 import "./MySybscriptions.css";
 import {privateFetch} from "../utils/pacificaUtils.js";
 
@@ -59,9 +60,13 @@ export default function MySubscriptions() {
 
             if (data.success) {
                 setSubscriptions(prev => prev.filter(s => s.address !== masterAddr));
+                toast.success(`Unfollowed ${masterAddr.slice(0,6)} successfully`);
+            } else {
+                toast.error(`Error: ${data.error}`);
             }
         } catch (err) {
-            console.error("Error while unsubscribing:", err);
+            console.error("Stop follow error:", err);
+            toast.error("Failed to stop following. Please try again.");
         }
     };
 
