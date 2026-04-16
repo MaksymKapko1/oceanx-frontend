@@ -44,30 +44,56 @@ export default function AppHeader() {
 
     useEffect(() => {
         if (!walletAddress) return;
+        if (!identityToken) {
+            console.log('[BuilderStatus] identityToken not ready yet, skipping');
+            return;
+        }
 
         const checkStatus = async () => {
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
+            console.log(`[BuilderStatus] Checking for wallet: ${walletAddress}, baseUrl: ${baseUrl}`);
+
             try {
+                console.log('[BuilderStatus] → Fetching from own backend...');
+                const cachedRes = await privateFetch(
+                    `${baseUrl}/api/user/builder-status`,
+                    { method: 'GET' },
+                    () => identityToken
+                );
+                const cachedData = await cachedRes.json();
+                console.log('[BuilderStatus] ← Backend response:', cachedData);
+
+                if (cachedData?.is_approved === true) {
+                    console.log('[BuilderStatus] ✅ Approved from DB, skipping Pacifica');
+                    setIsBuilderApproved(true);
+                    return;
+                }
+
+                console.log('[BuilderStatus] → Backend says not approved, checking Pacifica...');
                 const res = await fetch(`https://api.pacifica.fi/api/v1/account/builder_codes/approvals?account=${walletAddress}`);
                 const data = await res.json();
+                console.log('[BuilderStatus] ← Pacifica response:', data);
 
                 const isApproved = Array.isArray(data) && data.some(b => b.builder_code === BUILDER_CODE);
+                console.log(`[BuilderStatus] Pacifica isApproved: ${isApproved}`);
                 setIsBuilderApproved(isApproved);
 
                 if (!isApproved) {
                     setTimeout(() => setShowActivationModal(true), 1000);
                 }
 
-                await privateFetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/user/update-builder-status`, {
+                await privateFetch(`${baseUrl}/api/user/update-builder-status`, {
                     method: 'POST',
-                    body: JSON.stringify({is_approved: isApproved })
+                    body: JSON.stringify({ is_approved: isApproved })
                 }, () => identityToken);
+
             } catch (e) {
-                console.error("Status check failed", e);
+                console.error('[BuilderStatus] ❌ Error:', e);
             }
         };
 
         checkStatus();
-    }, [walletAddress]);
+    }, [walletAddress, identityToken]);
 
     const handleActivationFromModal = async () => {
         await handleApproveBuilder();
@@ -87,7 +113,7 @@ export default function AppHeader() {
                 || wallets[0];
 
             const timestamp = Date.now();
-            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
             const payloadToSign = {
                 timestamp: timestamp,
