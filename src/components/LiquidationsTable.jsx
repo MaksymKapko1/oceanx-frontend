@@ -1,10 +1,12 @@
 import React, {useCallback, useEffect, useState, useMemo, useRef} from 'react';
 import { Flame, TrendingDown, TrendingUp, Activity, ChevronDown } from 'lucide-react';
 import {useMarketStats} from "../hooks/useMarketStats.js";
+import { useIdentityToken } from "@privy-io/react-auth";
 import './LiquidationsTable.css';
 
 export default function LiquidationsTable() {
     const PAGE_SIZE = 20;
+    const { identityToken } = useIdentityToken();
     const {stats} = useMarketStats();
 
     const availableMarkets = useMemo(() => {
@@ -60,6 +62,49 @@ export default function LiquidationsTable() {
         }
     }, [filterCoin, baseUrl, sortOrder, timeRange]);
 
+    const filterRef = useRef(filterCoin);
+    useEffect(() => {
+        filterRef.current = filterCoin;
+    }, [filterCoin]);
+
+    useEffect(() => {
+        const wsUrl = baseUrl.replace('http', 'ws') + '/ws';
+        const ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
+                action: 'auth',
+                token: identityToken || null
+            }));
+
+            if (identityToken) {
+                console.log("🔒 WS Connected (User)");
+            } else {
+                console.log("🔓 WS Connected (Guest)");
+            }
+        };
+
+        ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            if (msg.type === 'liquidations') {
+                const currentFilter = filterRef.current;
+                const filtered = msg.data.filter(l => currentFilter === 'ALL' || l.coin === currentFilter);
+
+                if (filtered.length > 0) {
+                    setLiquidations(prev => [...filtered, ...prev].slice(0, 100));
+                }
+            }
+        };
+
+        ws.onclose = (event) => {
+            if (event.code === 4001 || event.code === 4003) {
+                console.error("❌ WS Auth failed. Check token.");
+            }
+        };
+
+        return () => ws.close();
+    }, [baseUrl, identityToken]);
+
     useEffect(() => {
         function handleClickOutside(event) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -92,19 +137,6 @@ export default function LiquidationsTable() {
         setOffset(nextOffset);
         fetchLiquidations(nextOffset, false);
     };
-
-    useEffect(() => {
-        const wsUrl = baseUrl.replace('http', 'ws') + '/ws';
-        const ws = new WebSocket(wsUrl);
-        ws.onmessage = (event) => {
-            const msg = JSON.parse(event.data);
-            if (msg.type === 'liquidations') {
-                const filtered = msg.data.filter(l => filterCoin === 'ALL' || l.coin === filterCoin);
-                setLiquidations(prev => [...filtered, ...prev].slice(0, 100));
-            }
-        };
-        return () => ws.close();
-    }, [filterCoin, baseUrl]);
 
     const formatUSD = (val) => new Intl.NumberFormat('en-US', {
         style: 'currency', currency: 'USD', maximumFractionDigits: 0

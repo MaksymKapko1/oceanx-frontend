@@ -37,41 +37,70 @@ export default function OpenPositionsSection() {
     useEffect(() => {
         if (!walletAddress) return;
 
+        let reconnectTimeout;
+        let pingInterval;
+
         const connectWS = () => {
+            if (pingInterval) clearInterval(pingInterval);
+            if (ws.current) ws.current.close();
+
             ws.current = new WebSocket(WS_URL);
 
             ws.current.onopen = () => {
+                console.log("✅ Pacifica WS Connected");
                 ws.current.send(JSON.stringify({ method: "subscribe", params: { source: "account_positions", account: walletAddress } }));
                 ws.current.send(JSON.stringify({ method: "subscribe", params: { source: "account_info", account: walletAddress } }));
                 ws.current.send(JSON.stringify({ method: "subscribe", params: { source: "prices" } }));
                 setLoading(false);
+
+                pingInterval = setInterval(() => {
+                    if (ws.current?.readyState === WebSocket.OPEN) {
+                        ws.current.send(JSON.stringify({ method: "ping" }));
+                    }
+                }, 30000);
             };
 
             ws.current.onmessage = (event) => {
-                const response = JSON.parse(event.data);
-                if (response.channel === "account_positions") setPositions(response.data || []);
-                if (response.channel === "account_info" && response.data) {
-                    setAccountInfo({ ae: parseFloat(response.data.ae || 0), cm: parseFloat(response.data.cm || 0) });
-                }
-                if (response.channel === "prices" && Array.isArray(response.data)) {
-                    setPrices(prevPrices => {
-                        const newPrices = { ...prevPrices };
-                        response.data.forEach(ticker => {
-                            if (ticker.symbol && ticker.mark) newPrices[ticker.symbol] = parseFloat(ticker.mark);
+                try {
+                    const response = JSON.parse(event.data);
+                    if (response.channel === "account_positions") setPositions(response.data || []);
+                    if (response.channel === "account_info" && response.data) {
+                        setAccountInfo({ ae: parseFloat(response.data.ae || 0), cm: parseFloat(response.data.cm || 0) });
+                    }
+                    if (response.channel === "prices" && Array.isArray(response.data)) {
+                        setPrices(prevPrices => {
+                            const newPrices = { ...prevPrices };
+                            response.data.forEach(ticker => {
+                                if (ticker.symbol && ticker.mark) newPrices[ticker.symbol] = parseFloat(ticker.mark);
+                            });
+                            return newPrices;
                         });
-                        return newPrices;
-                    });
+                    }
+                } catch (e) {
+                    console.error("WS Parse error", e);
                 }
             };
-            ws.current.onclose = () => setTimeout(connectWS, 5000);
+
+            ws.current.onerror = (err) => {
+                console.error("❌ Pacifica WS Error:", err);
+            };
+
+            ws.current.onclose = (event) => {
+                console.log("⚠️ Pacifica WS Closed", event.code);
+                reconnectTimeout = setTimeout(connectWS, 5000);
+            };
         };
 
         connectWS();
-        const pingInterval = setInterval(() => {
-            if (ws.current?.readyState === WebSocket.OPEN) ws.current.send(JSON.stringify({ method: "ping" }));
-        }, 30000);
 
-        return () => { clearInterval(pingInterval); ws.current?.close(); };
+        return () => {
+            if (pingInterval) clearInterval(pingInterval);
+            if (reconnectTimeout) clearTimeout(reconnectTimeout);
+            if (ws.current) {
+                ws.current.onclose = null;
+                ws.current.close();
+            }
+        };
     }, [walletAddress]);
 
     const formatNum = (val, decimals = 2) => parseFloat(val || 0).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });

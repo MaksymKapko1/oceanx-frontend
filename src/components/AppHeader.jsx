@@ -304,6 +304,7 @@ export default function AppHeader() {
                     <NavLink to="/copytrading" className={getMobileLinkClass} onClick={closeMenu}>Copy Trading</NavLink>
                     <NavLink to="/stats" className={getMobileLinkClass} onClick={closeMenu}>Stats</NavLink>
                     <NavLink to="/heatmaps" className={getMobileLinkClass} onClick={closeMenu}>Heatmaps</NavLink>
+                    <NavLink to="/liquidations" className={getMobileLinkClass} onClick={closeMenu}>Liquidations</NavLink>
                 </div>
             )}
 

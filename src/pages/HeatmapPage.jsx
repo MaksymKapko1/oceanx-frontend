@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, Flame, TrendingUp, Loader2 } from 'lucide-react';
 import { useMarketStats } from '../hooks/useMarketStats';
-
+import { useIdentityToken } from "@privy-io/react-auth";
 import OrderbookView from '../components/Heatmap/OrderbookView';
 import DepthChartView from '../components/Heatmap/DepthChartView';
 import HeatmapProView from '../components/Heatmap/HeatmapProView';
@@ -19,6 +19,7 @@ const formatVolume = (vol) => {
 
 export default function HeatmapPage() {
     const { stats, loading } = useMarketStats();
+    const { identityToken } = useIdentityToken();
 
     const [activeSymbol, setActiveSymbol] = useState('SOL');
     const [searchQuery, setSearchQuery] = useState('');
@@ -45,7 +46,13 @@ export default function HeatmapPage() {
         const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8001/ws';
         const ws = new WebSocket(wsUrl);
         wsRef.current = ws;
+
         ws.onopen = () => {
+            ws.send(JSON.stringify({
+                action: 'auth',
+                token: identityToken || null
+            }));
+
             setIsConnected(true);
             ws.send(JSON.stringify({ action: 'subscribe', params: { source: 'book', symbol: prevSymbolRef.current, agg_level: 1 }}));
         };
@@ -57,9 +64,10 @@ export default function HeatmapPage() {
                 }
             } catch (e) {}
         };
+
         ws.onclose = () => setIsConnected(false);
         return () => ws.close();
-    }, []);
+    }, [identityToken]);
 
     useEffect(() => {
         if (!isConnected || !wsRef.current) return;
