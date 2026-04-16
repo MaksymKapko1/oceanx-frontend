@@ -1,11 +1,10 @@
-/* --- 1. ОСНОВНОЙ КАРКАС ХЕДЕРА --- */
 .app-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.03); /* Легкое стекло */
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -26,7 +25,6 @@
     align-items: center;
 }
 
-/* --- 2. НАВИГАЦИЯ (ДЕКСТОП) --- */
 .desktop-nav {
     display: flex;
     align-items: center;
@@ -47,7 +45,6 @@
 .nav-link:hover { color: white; }
 .nav-link.active { background: rgba(255, 255, 255, 0.2); color: white; }
 
-/* --- 3. КНОПКИ (GLASS EFFECT) --- */
 .glass-btn {
     background: rgba(255, 255, 255, 0.07);
     border: 0.5px solid rgba(255, 255, 255, 0.3);
@@ -83,7 +80,6 @@
     box-shadow: 0 0 5px #f87171;
 }
 
-/* --- 4. КОШЕЛЕК И ВЫПАДАЮЩЕЕ МЕНЮ ПРОФИЛЯ --- */
 .wallet-wrapper {
     position: relative;
 }
@@ -150,7 +146,7 @@
 }
 
 .balance-label, .pending-label, .fee-label {
-    color: rgba(255, 255, 255, 0.9); /* Сделали ярче, почти чистый белый */
+    color: rgba(255, 255, 255, 0.9);
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -169,7 +165,6 @@
 .dropdown-item.text-red { color: #f87171; border-color: rgba(248, 113, 113, 0.1); }
 .dropdown-item.text-red:hover { background: rgba(248, 113, 113, 0.1); border-color: rgba(248, 113, 113, 0.3); }
 
-/* --- 5. ЕДИНЫЙ БЛОК ДЕЙСТВИЙ (HEADER ACTIONS) --- */
 .header-actions {
     display: flex;
     align-items: center;
@@ -177,15 +172,12 @@
 }
 
 .mobile-menu-btn {
-    display: none !important; /* На десктопе скрыт */
+    display: none !important;
 }
 
-/* --- 6. АДАПТИВ (ПЛАНШЕТЫ И ТЕЛЕФОНЫ) --- */
 @media (max-width: 1024px) {
-    /* Прячем навигацию и колокольчик */
     .desktop-nav, .desktop-only { display: none !important; }
 
-    /* Показываем бургер */
     .mobile-menu-btn {
         display: flex !important;
         padding: 8px;
@@ -193,7 +185,6 @@
         z-index: 2000;
     }
 
-    /* Уменьшаем кнопку кошелька, чтобы всё влезло в шапку */
     .app-header .connect-btn {
         padding: 6px 12px !important;
         font-size: 0.8rem !important;
@@ -204,28 +195,26 @@
 }
 
 @media (max-width: 768px) {
-    /* Выпадающее меню профиля (кошелька) сжимаем под ширину телефона */
     .header-container {
         padding: 0 16px;
         height: 64px;
     }
 
-    /* 🔥 ЖЕЛЕЗОБЕТОННЫЙ ФИКС МЕНЮ ПРОФИЛЯ 🔥 */
     .profile-dropdown-wrapper {
         position: fixed !important;
-        top: 64px !important; /* Ровно под мобильным хедером */
-        left: 50% !important; /* Ставим точку отсчета ровно по центру экрана */
-        transform: translateX(-50%) !important; /* Сдвигаем назад на половину своей ширины (идеальный центр) */
+        top: 64px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
 
-        width: calc(100vw - 32px) !important; /* Ширина экрана минус отступы по 16px с боков */
-        max-width: 380px !important; /* Не даем растягиваться слишком сильно на планшетах */
+        width: calc(100vw - 32px) !important;
+        max-width: 380px !important;
 
         padding: 10px 0 0 0 !important;
         z-index: 9999 !important;
     }
 
     .profile-dropdown-menu {
-        width: 100% !important; /* Занимает всю доступную ширину враппера */
+        width: 100% !important;
         min-width: unset !important;
         max-width: unset !important;
         right: auto !important;
@@ -235,15 +224,13 @@
     }
 }
 
-/* --- 7. МОБИЛЬНОЕ ВЫПАДАЮЩЕЕ МЕНЮ (ПОД ХЕДЕРОМ) --- */
 .mobile-dropdown {
     position: fixed;
-    top: 76px; /* Строго под хедером */
+    top: 76px;
     left: 0;
     width: 100vw;
     height: calc(100vh - 76px);
 
-    /* Твой фирменный градиент */
     background: linear-gradient(135deg, rgba(6, 95, 70, 0.95) 0%, rgba(8, 145, 178, 0.95) 50%, rgba(21, 94, 117, 0.95) 100%);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
@@ -264,7 +251,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Ссылки-кнопки в мобильном меню */
 .mobile-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none !important;
@@ -295,23 +281,16 @@
     box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
 }
 
-/* Убираем рамку выделения на мобилках */
 .mobile-dropdown *:focus, .app-header *:focus {
     outline: none !important;
     -webkit-tap-highlight-color: transparent;
 }
 
-
-/* =========================================
-   8. ФИКС ГАЙДА С ПАЦИ НА МОБИЛКЕ
-========================================= */
 @media (max-width: 768px) {
-    /* 1. Главная карточка гайда */
     .guide-glass-modal {
         width: 90vw !important;
         max-width: 360px !important;
 
-        /* 🔥 УБИВАЕМ координаты из JS и ставим строго по центру экрана */
         left: 50% !important;
         top: 50% !important;
         transform: translate(-50%, -50%) !important;
@@ -319,13 +298,9 @@
         padding: 24px 20px !important;
         border-radius: 24px !important;
     }
-
-    /* Прячем стрелочку на мобилке (ссылки в бургере, указывать не на что) */
     .guide-arrow-up {
         display: none !important;
     }
-
-    /* 2. Выстраиваем акулу и текст в КОЛОНКУ */
     .guide-content-wrapper {
         display: flex !important;
         flex-direction: column !important;
@@ -334,25 +309,21 @@
         gap: 16px !important;
     }
 
-    /* 3. Оформляем блок с акулой */
     .mascot-container {
         width: 100% !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        border-right: none !important; /* Убираем вертикальную полосу-разделитель */
+        border-right: none !important;
         padding-right: 0 !important;
         margin-bottom: 8px !important;
     }
-
-    /* Уменьшаем саму картинку Паци */
     .mascot-avatar-img {
         width: 130px !important;
         height: auto !important;
         min-width: 130px !important;
     }
 
-    /* 4. Центрируем текстовый блок */
     .guide-text-area {
         width: 100% !important;
         display: flex !important;
@@ -361,7 +332,6 @@
         text-align: center !important;
     }
 
-    /* Заголовок с иконкой по центру */
     .guide-header {
         justify-content: center !important;
         width: 100% !important;
@@ -379,12 +349,10 @@
         line-height: 1.5 !important;
     }
 
-    /* Кнопка Follow X по центру */
     .btn-x-follow {
         margin: 16px auto !important;
     }
 
-    /* 5. Кнопки навигации снизу (Skip, точки, Next) */
     .guide-actions {
         width: 100% !important;
         justify-content: space-between !important;
@@ -394,16 +362,12 @@
     }
 }
 
-/* =========================================
-   9. МОДАЛКА АКТИВАЦИИ БИЛДЕРА (OCEANX STYLE)
-========================================= */
 .builder-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    /* Глубокий темный фон морского оттенка */
     background: rgba(4, 15, 30, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -420,9 +384,8 @@
 }
 
 .builder-modal-content {
-    /* Фирменный морской градиент как в меню профиля */
     background: linear-gradient(135deg, rgba(4, 20, 45, 0.98) 0%, rgba(0, 55, 75, 0.95) 45%, rgba(6, 16, 50, 0.98) 100%);
-    border: 1px solid rgba(34, 211, 238, 0.3); /* Бирюзовый бордер */
+    border: 1px solid rgba(34, 211, 238, 0.3);
     border-radius: 24px;
     padding: 40px;
     max-width: 420px;
@@ -434,7 +397,6 @@
     overflow: hidden;
 }
 
-/* Декоративный неоновый блик сверху модалки */
 .builder-modal-content::before {
     content: '';
     position: absolute;
@@ -469,7 +431,6 @@
     font-size: 1.6rem;
     margin-bottom: 12px;
     font-weight: 800;
-    /* Фирменный градиент текста из Hero секции */
     background: linear-gradient(to right, #22d3ee, #3b82f6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -503,7 +464,6 @@
     font-weight: 500;
 }
 
-/* Кастомные бирюзовые галочки (убираем эмодзи из HTML!) */
 .feature-item::before {
     content: '✓';
     display: flex;
@@ -523,7 +483,6 @@
 .builder-activate-btn {
     width: 100%;
     padding: 16px;
-    /* Бирюзовый градиент кнопки */
     background: linear-gradient(90deg, #0891b2, #0284c7);
     border: 1px solid rgba(34, 211, 238, 0.5);
     border-radius: 12px;
@@ -566,7 +525,7 @@
     height: 100%;
     display: flex;
     align-items: center;
-    padding-bottom: 15px; /* Мостик для курсора */
+    padding-bottom: 15px;
     margin-bottom: -15px;
 }
 
@@ -574,7 +533,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 16px; /* Чуть шире для овальной формы */
+    padding: 6px 16px;
     transition: all 0.3s ease;
 }
 
@@ -592,23 +551,16 @@
     transform: rotate(180deg);
 }
 
-/* ❄️ OCEANX FROST GLASS THEME */
 .oceanx-glass-menu {
     position: absolute;
-    top: calc(100% - 5px); /* Прижимаем к кнопке */
+    top: calc(100% - 5px);
     left: 0;
     min-width: 220px;
-
-    /* 👈 1. Плотный цвет фона (0.9), чтобы ничего не просвечивало */
     background: rgba(13, 17, 23, 0.92);
-
-    /* 👈 2. Мощный блюр для эффекта глубины */
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-
-    /* 👈 3. Тонкий циановый бортик */
     border: 1px solid rgba(34, 211, 238, 0.25);
-    border-radius: 16px; /* Софт-квадрат с закруглениями */
+    border-radius: 16px;
 
     padding: 8px;
     box-shadow:
@@ -623,7 +575,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Настройки пунктов меню */
 .glass-item {
     display: flex;
     align-items: center;
@@ -633,11 +584,10 @@
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
-    border-radius: 20px !important; /* 👈 МАКСИМАЛЬНОЕ ЗАКРУГЛЕНИЕ ВЫДЕЛЕНИЯ */
+    border-radius: 20px !important;
     margin-bottom: 4px;
     transition: all 0.2s ease;
 }
-/* Ховер на пунктах */
 .glass-item:hover {
     background: rgba(255, 255, 255, 0.04);
     color: white;
@@ -647,11 +597,9 @@
     border-bottom: none;
 }
 
-/* Иконки */
 .icon-cyan { color: #22d3ee; }
-.icon-red { color: #f87171; } /* В цвет твоих шортов/проигрышей */
-.icon-yellow { color: #fbbf24; } /* В цвет твоего бейджа */
-/* Кастомный стиль для Ликвидаций */
+.icon-red { color: #f87171; }
+.icon-yellow { color: #fbbf24; }
 .glass-item:hover .icon-red {
     transform: scale(1.2);
 }
@@ -659,16 +607,16 @@
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-* Группировка кнопок *
+
 .nav-group-insights {
     margin-left: 12px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 2px 8px !important; /* Уменьшаем внутренние отступы самой кнопки-контейнера */
+    padding: 2px 8px !important;
 }
 
 .nav-link,
 .dropdown-trigger {
-    border-radius: 20px !important; /* Максимальное закругление (Pill shape) */
+    border-radius: 20px !important;
 }

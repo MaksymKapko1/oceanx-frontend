@@ -54,7 +54,6 @@
     font-weight: 600;
 }
 
-/* Balance card — label слева, значение справа */
 .balance-card {
     display: flex;
     flex-direction: row;

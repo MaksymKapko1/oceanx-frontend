@@ -46,14 +46,14 @@ export function useAgentWallet() {
 
             if (!response.ok) {
                 const err = await response.json();
-                throw new Error(err.detail || "Ошибка на бэкенде");
+                throw new Error(err.detail || "Backend error");
             }
 
-            console.log("✅ Агент привязан через бэкенд!");
+            console.log("✅ The agent is linked via the backend!");
             return solanaWallet.address;
 
         } catch (error) {
-            console.error("❌ Ошибка:", error);
+            console.error("❌ Error:", error);
             throw error;
         }
     };

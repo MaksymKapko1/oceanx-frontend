@@ -1,10 +1,6 @@
 .app-footer {
-    /* 🔥 Оставляем только тонкую полупрозрачную линию сверху */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-
-    /* 🔥 Убираем темный фон-коробку, делаем полностью прозрачным */
     background: transparent;
-
     padding: 60px 20px 40px 20px;
     margin-top: 80px;
     width: 100%;
@@ -15,7 +11,7 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap; /* Для мобилок */
+    flex-wrap: wrap;
     gap: 40px;
 }
 
@@ -31,7 +27,7 @@
 }
 
 .footer-logo span {
-    color: #22d3ee; /* Бирюзовый акцент */
+    color: #22d3ee;
 }
 
 .footer-desc {
@@ -72,10 +68,9 @@
 }
 
 .footer-column a:hover {
-    color: #22d3ee; /* Бирюзовый ховер */
+    color: #22d3ee;
 }
 
-/* Адаптив для телефонов в Футере */
 @media (max-width: 768px) {
     .footer-content {
         flex-direction: column;
@@ -89,12 +84,12 @@
     }
 
     .footer-links-grid {
-        flex-direction: column; /* Колонки ссылок друг под другом */
+        flex-direction: column;
         gap: 30px;
         width: 100%;
     }
 
     .app-footer {
-        padding: 40px 20px 30px 20px; /* Чуть меньше отступов для мобилки */
+        padding: 40px 20px 30px 20px;
     }
 }

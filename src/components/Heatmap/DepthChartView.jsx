@@ -1,9 +1,7 @@
-// src/components/Heatmap/DepthChartView.jsx
 import React, { useMemo } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function DepthChartView({ orderbook }) {
-    // Переносим математику сюда
     const data = useMemo(() => {
         if (!orderbook.bids.length || !orderbook.asks.length) return [];
 

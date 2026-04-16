@@ -8,12 +8,14 @@ import OnboardingGuide from "./components/OnboardGuide/OnboardingGuide.jsx";
 import LiquidationsPage from "./pages/LiquidationsPage.jsx";
 import React from "react";
 import {useAuthSync} from "./hooks/useAuthSync.js";
+import {Toaster} from 'sonner';
 
 function App() {
     useAuthSync();
 
     return (
             <>
+                <Toaster richColors position="top-right" />
                 <AppHeader />
                 <Routes>
                     <Route path="/" element={<MainPage />} />

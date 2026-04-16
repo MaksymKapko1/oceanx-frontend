@@ -11,7 +11,6 @@
     box-sizing: border-box;
 }
 
-/* --- SIDEBAR (ЛЕВАЯ ПАНЕЛЬ) --- */
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -60,7 +59,6 @@
     font-size: 0.9rem;
 }
 
-/* Список маркетов */
 .market-list {
     flex: 1;
     overflow-y: auto;
@@ -115,7 +113,6 @@
 .market-item .symbol { font-weight: 600; font-size: 0.95rem; }
 .market-item .volume { font-size: 0.8rem; opacity: 0.6; }
 
-/* --- MAIN AREA (ПРАВАЯ ПАНЕЛЬ) --- */
 .heatmap-main {
     display: flex;
     flex-direction: column;
@@ -123,7 +120,6 @@
     height: calc(100vh - 140px);
 }
 
-/* Шапка с табами */
 .heatmap-header {
     display: flex;
     justify-content: space-between;
@@ -136,26 +132,26 @@
 }
 
 .active-market-info {
-    display: flex;         /* Включаем флекс */
-    align-items: center;    /* Выравниваем строго по центру вертикали */
-    gap: 12px;              /* Расстояние между текстом и плашкой */
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .active-market-info h1 {
     font-size: 1.4rem;
     font-weight: 800;
-    margin: 0;              /* Убираем отступы, чтобы не ломать центровку */
-    line-height: 1;         /* Фиксируем высоту строки */
+    margin: 0;
+    line-height: 1;
     background: linear-gradient(to right, #fff, rgba(255,255,255,0.7));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .status-badge {
-    display: inline-flex;   /* Внутренний флекс для точки и текста */
+    display: inline-flex;
     align-items: center;
     padding: 4px 10px;
-    border-radius: 8px;     /* Чуть более строгий радиус для Pro-вида */
+    border-radius: 8px;
     font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -190,7 +186,6 @@
     background: #f59e0b;
 }
 
-/* КНОПКИ ТАБОВ */
 .heatmap-controls {
     display: flex;
     gap: 8px;
@@ -221,7 +216,6 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* ГЛАВНЫЙ КОНТЕЙНЕР ДЛЯ ГРАФИКА/СТАКАНА */
 .heatmap-canvas-container {
     flex: 1;
     background: rgba(255, 255, 255, 0.02);
@@ -229,7 +223,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
     display: flex;
-    justify-content: center; /* Чтобы стакан был по центру */
+    justify-content: center;
     align-items: flex-start;
     padding: 40px;
     position: relative;
@@ -242,7 +236,6 @@
     opacity: 0.5;
 }
 
-/* --- АДАПТИВ --- */
 @media (max-width: 1100px) {
     .heatmap-layout {
         grid-template-columns: 1fr;
@@ -266,7 +259,6 @@
         overflow-y: hidden;
     }
 
-    /* Список рынков горизонтально */
     .market-list {
         display: flex;
         flex-direction: row;

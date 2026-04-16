@@ -34,30 +34,23 @@
     align-items: center;
 }
 
-/* =========================================
-   ДОБАВЛЕННЫЕ ПРАВИЛА ДЛЯ UNFOLLOW
-   ========================================= */
 
-/* 1. Делаем кнопку красной при наведении */
 .follow-btn.followed:hover {
     border-color: #ef4444;
     color: #ef4444;
     background: rgba(239, 68, 68, 0.1);
 }
 
-/* 2. Прячем слово "Following" (которое лежит в span) */
 .follow-btn.followed:hover span {
     display: none;
 }
 
-/* 3. Показываем слово "Unfollow" */
 .follow-btn.followed:hover::after {
     content: "Unfollow";
 }
 
-/* Кнопка анти-копирования */
 .follow-btn.anti {
-    background: #f87171; /* Красная кнопка для опасного режима */
+    background: #f87171;
     color: #0f172a;
 }
 

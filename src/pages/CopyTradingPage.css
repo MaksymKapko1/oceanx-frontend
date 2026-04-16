@@ -1,9 +1,8 @@
-/* Главный контейнер страницы */
 .copy-trading-page {
-    width: 96%; /* Занимаем почти весь экран */
+    width: 96%;
     max-width: 1920px;
     margin: 0 auto;
-    padding: 100px 0 40px; /* Фиксированный отступ сверху решает проблему "прыжка" */
+    padding: 100px 0 40px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -11,49 +10,40 @@
     box-sizing: border-box;
 }
 
-/* Верхняя область под позиции */
 .copy-top-header {
     width: 100%;
-    /* Если позиций нет, блок просто схлопнется, но padding страницы удержит отступ */
 }
 
-/* Основная сетка контента */
 .copy-content-grid {
     display: grid;
-    /* Возвращаем четкую сетку: 2/3 Лидерборд, 1/3 Сайдбар */
     grid-template-columns: 2fr 1fr;
     gap: 24px;
-    align-items: stretch; /* Чтобы сайдбар не тянулся вниз по высоте лидерборда */
+    align-items: stretch;
 }
 
-/* Левая колонка */
 .copy-main-column {
-    min-width: 0; /* Важно для предотвращения раздувания грида таблицами */
+    min-width: 0;
 }
 
-/* Правая колонка */
 .copy-sidebar-column {
     align-self: stretch;
     position: sticky;
     top: 24px;
     flex: 1;
-    min-width: 380px; /* Минималка, чтобы настройки влезали */
+    min-width: 380px;
     display: flex;
     flex-direction: column;
-    /* УБИРАЕМ GAP! */
     gap: 0;
 
-    /* Переносим GLASS-стиль сюда (то, что было в индивидуальных CSS) */
     background: rgba(255, 255, 255, 0.05) !important;
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 16px; /* Закругляем общую карту */
-    overflow: hidden; /* Критично, чтобы внутренние секции не вылезали за радиус */
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-/* Адаптив для средних экранов */
 @media (max-width: 1200px) {
     .copy-content-grid {
-        grid-template-columns: 1fr; /* Переходим в одну колонку */
+        grid-template-columns: 1fr;
     }
 }

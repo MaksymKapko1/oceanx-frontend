@@ -1,4 +1,3 @@
-// src/components/LiveTicker/LiveTicker.jsx
 import { useEffect, useRef, useState } from 'react';
 import './LiveTicker.css';
 

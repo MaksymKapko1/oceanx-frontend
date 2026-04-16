@@ -5,10 +5,10 @@
     backdrop-filter: blur(8px);
     z-index: 5000;
     display: flex;
-    align-items: flex-start;   /* ← старт сверху, не центр */
+    align-items: flex-start;
     justify-content: center;
-    padding: 90px 16px 16px;   /* ← 90px = хедер сайта + зазор */
-    overflow-y: auto;          /* ← если не влезает — скроллится */
+    padding: 90px 16px 16px;
+    overflow-y: auto;
 }
 
 .bridge-modal {
@@ -22,7 +22,7 @@
     flex-direction: column;
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
     animation: bridgeSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    flex-shrink: 0;            /* ← не сжимается flex-ом */
+    flex-shrink: 0;
 }
 
 @keyframes bridgeSlideUp {

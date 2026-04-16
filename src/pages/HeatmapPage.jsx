@@ -1,4 +1,3 @@
-// src/pages/HeatmapPage.jsx
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, Flame, TrendingUp, Loader2 } from 'lucide-react';
 import { useMarketStats } from '../hooks/useMarketStats';
@@ -84,7 +83,6 @@ export default function HeatmapPage() {
 
                     {!loading && (
                         <>
-                            {/* ГОРЯЧИЕ */}
                             <div className="market-section">
                                 <div className="section-title"><Flame size={12}/> HOT</div>
                                 {hotMarkets.map(m => (
@@ -95,7 +93,6 @@ export default function HeatmapPage() {
                                 ))}
                             </div>
 
-                            {/* ВСЕ ОСТАЛЬНЫЕ */}
                             <div className="market-section">
                                 <div className="section-title"><TrendingUp size={12}/> ALL</div>
                                 {regularMarkets.map(m => (
@@ -130,7 +127,6 @@ export default function HeatmapPage() {
                         <div className="placeholder-canvas" style={{ marginTop: '20%' }}><Loader2 className="lucide-spin text-cyan" size={32} /><h3>Loading...</h3></div>
                     ) : (
                         <>
-                            {/* РЕНДЕРИМ КОМПОНЕНТЫ В ЗАВИСИМОСТИ ОТ ТАБА */}
                             {activeTab === 'orderbook' && <OrderbookView orderbook={orderbook} />}
                             {activeTab === 'depth' && <DepthChartView orderbook={orderbook} />}
                             {activeTab === 'heatmap' && <HeatmapProView orderbook={orderbook} symbol={activeSymbol}/>}

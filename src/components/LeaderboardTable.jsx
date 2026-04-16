@@ -29,26 +29,22 @@ export default function LeaderboardTable() {
 
     const [mode, setMode] = useState('copy');
 
-    // Стейты для поиска
     const [searchInput, setSearchInput] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
 
-    // Стейт для открытой строки позиций
     const [expandedAddress, setExpandedAddress] = useState(null);
 
-    // Стейт для индикации копирования
     const [copiedAddress, setCopiedAddress] = useState(null);
 
     const handleRowClick = (address) => {
         setExpandedAddress(prev => prev === address ? null : address);
     };
 
-    // Функция копирования
     const handleCopyAddress = (e, address) => {
-        e.stopPropagation(); // ВАЖНО: блокируем клик, чтобы строка не открывалась
+        e.stopPropagation();
         navigator.clipboard.writeText(address);
         setCopiedAddress(address);
-        setTimeout(() => setCopiedAddress(null), 2000); // Возвращаем иконку обратно через 2 сек
+        setTimeout(() => setCopiedAddress(null), 2000);
     };
 
     const toggleStrategy = async (trader) => {
@@ -57,10 +53,8 @@ export default function LeaderboardTable() {
         const newMode = currentMode === 'anticopy' ? 'copy' : 'anticopy';
         const isReverse = newMode === 'anticopy';
 
-        // 1. Сначала обновляем локально для мгновенного отклика UI
         setTraderStrategies(prev => ({ ...prev, [addr]: newMode }));
 
-        // 2. Если юзер уже подписан — сразу шлем запрос на бэк
         if (trader.is_followed && authenticated && user?.wallet?.address) {
             try {
                 const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
@@ -74,24 +68,22 @@ export default function LeaderboardTable() {
                 const data = await response.json();
 
                 if (!data.success) {
-                    // Если бэк вернул ошибку, откатываем стейт назад
                     setTraderStrategies(prev => ({ ...prev, [addr]: currentMode }));
                     console.error("Failed to sync strategy:", data.error);
                 } else {
-                    console.log(`✅ Стратегия синхронизирована: ${newMode}`);
+                    console.log(`✅ The strategy has been aligned: ${newMode}`);
                 }
             } catch (err) {
-                console.error("Ошибка при обновлении стратегии:", err);
+                console.error("Error updating the strategy:", err);
                 setTraderStrategies(prev => ({ ...prev, [addr]: currentMode }));
             }
         }
     };
 
-    // Debounce: ждем 300мс после ввода
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearch(searchInput);
-            setPage(0); // При новом поиске всегда возвращаемся на первую страницу
+            setPage(0);
         }, 300);
 
         return () => clearTimeout(timer);
@@ -119,35 +111,29 @@ export default function LeaderboardTable() {
             const res = await response.json();
 
             if (res.success && res.data) {
-                // --- 👇 ВОТ ЭТОТ БЛОК НУЖНО ДОБАВИТЬ 👇 ---
                 const syncStrategies = {};
 
                 res.data.forEach(trader => {
-                    // Если мы уже подписаны на этого чела (is_followed пришел true с бэка)
                     if (trader.is_followed) {
-                        // Подтягиваем из базы реальный режим: если is_reverse=true, то anticopy
                         syncStrategies[trader.address] = trader.is_reverse ? 'anticopy' : 'copy';
                     }
                 });
 
-                // Мержим данные из базы в наш локальный стейт свитчеров
                 setTraderStrategies(prev => ({
                     ...prev,
                     ...syncStrategies
                 }));
-                // --- 👆 КОНЕЦ БЛОКА СИНХРОНИЗАЦИИ 👆 ---
 
                 setLeaderboard(res.data);
                 setTotal(res.total);
             }
         } catch (err) {
-            console.error("🔴 Ошибка загрузки лидерборда:", err);
+            console.error("🔴 Error loading the leaderboard:", err);
         } finally {
             setLoading(false);
         }
     };
 
-    // Главный хук загрузки данных
     useEffect(() => {
         fetchLeaderboard(page, period, false, debouncedSearch, mode);
 
@@ -158,7 +144,7 @@ export default function LeaderboardTable() {
     const handleModeToggle = () => {
         const newMode = mode === 'copy' ? 'anticopy' : 'copy';
         setMode(newMode);
-        setPage(0); // Сброс на первую страницу при смене режима
+        setPage(0);
     };
 
     const handlePeriodChange = (newPeriod) => {
@@ -166,7 +152,6 @@ export default function LeaderboardTable() {
         setPage(0);
     };
 
-    // Обновляем статус кнопки без перезагрузки всей таблицы
     const handleSubscriptionChange = (address, isFollowing) => {
         setLeaderboard(prev => prev.map(trader =>
             trader.address.toLowerCase() === address.toLowerCase()
@@ -190,14 +175,12 @@ export default function LeaderboardTable() {
         <div className={`lb-wrapper ${mode === 'anticopy' ? 'mode-anticopy' : ''}`}>
             <div className="lb-container">
 
-                {/* Шапка */}
                 <div className="lb-header">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <h2 className="lb-title">
                             {mode === 'copy' ? 'Top Traders' : 'Top Losers'}
                         </h2>
 
-                        {/* 👈 ДОБАВИЛИ КНОПКУ ПЕРЕКЛЮЧЕНИЯ */}
                         <button
                             className={`mode-toggle-btn ${mode}`}
                             onClick={handleModeToggle}
@@ -228,7 +211,6 @@ export default function LeaderboardTable() {
                     </div>
                 </div>
 
-                {/* Колонки */}
                 <div className="lb-columns">
                     <span>Rank / Account</span>
                     <span className={period === '1d' ? 'active-sort' : ''}>1D PNL</span>
@@ -238,7 +220,6 @@ export default function LeaderboardTable() {
                     <span>Action</span>
                 </div>
 
-                {/* Строки */}
                 <div className="lb-list">
                     {loading ? (
                         <div className="lb-loading">Loading...</div>
@@ -251,14 +232,12 @@ export default function LeaderboardTable() {
                             const isExpanded = expandedAddress === addr;
 
                             return (
-                                // Обертка для строки и панели позиций
                                 <div key={addr || index} className="lb-row-wrapper">
                                     <div
                                         className={`lb-row ${isExpanded ? 'expanded' : ''}`}
                                         onClick={() => handleRowClick(addr)}
                                         style={{ cursor: 'pointer' }}
                                     >
-                                        {/* ВНЕДРЕНА ЛОГИКА КОПИРОВАНИЯ */}
                                         <div className="lb-cell lb-account">
                                             <div className={`lb-rank ${displayRank <= 3 ? 'lb-rank-top' : ''}`}>
                                                 {displayRank}
@@ -298,7 +277,6 @@ export default function LeaderboardTable() {
                                             {formatCurrency(trader.pnl_all_time)}
                                         </div>
 
-                                        {/* e.stopPropagation() не дает клику по кнопке открыть строку */}
                                         <div className="lb-cell lb-action" onClick={(e) => e.stopPropagation()}>
                                             <FollowButton
                                                 masterAddress={addr}
@@ -338,7 +316,6 @@ export default function LeaderboardTable() {
                                         </div>
                                     </div>
 
-                                    {/* Рендерим позиции только если строка открыта */}
                                     {isExpanded && <PositionsPanel address={addr} />}
                                 </div>
                             );
@@ -346,7 +323,6 @@ export default function LeaderboardTable() {
                     )}
                 </div>
 
-                {/* Пагинация */}
                 {totalPages > 1 && (
                     <div className="lb-pagination">
                         <button
@@ -380,18 +356,16 @@ const PositionsPanel = ({ address }) => {
 
     const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
-    // 1. ПОТОК ПОЗИЦИЙ (Раз в 30 сек)
     useEffect(() => {
         const fetchPositions = async () => {
             try {
                 const res = await fetch(`${baseUrl}/api/leaderboard/${address}/positions`);
                 const data = await res.json();
                 if (data.success) {
-                    console.log("📦 [СТАТИКА] Пришли позиции:", data.data);
                     setPositions(data.data);
                 }
             } catch (err) {
-                console.error("Ошибка загрузки позиций:", err);
+                console.error("Error loading items:", err);
             } finally {
                 setLoading(false);
             }
@@ -402,19 +376,16 @@ const PositionsPanel = ({ address }) => {
         return () => clearInterval(interval);
     }, [address, baseUrl]);
 
-    // 2. ПОТОК ЦЕН (Каждые 10 сек)
     useEffect(() => {
         const fetchPrices = async () => {
             try {
                 const res = await fetch(`${baseUrl}/api/leaderboard/prices`);
                 const data = await res.json();
                 if (data.success) {
-                    // Выводим в консоль цены только для BTC, ETH, SOL, чтобы не засорять эфир
-                    console.log(`🔥 [ДИНАМИКА] Свежие цены: BTC=$${data.data.BTC}, ETH=$${data.data.ETH}, SOL=$${data.data.SOL}`);
                     setPrices(data.data);
                 }
             } catch (err) {
-                console.error("Ошибка загрузки цен:", err);
+                console.error("Error loading prices:", err);
             }
         };
 

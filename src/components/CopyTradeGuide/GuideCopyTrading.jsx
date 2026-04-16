@@ -178,7 +178,6 @@ export default function GuideCopyTrading() {
                         <div className="cg-mascot-name">PACI</div>
                     </div>
 
-                    {/* 👇 ИСПРАВЛЕННЫЙ КЛАСС: ТЕПЕРЬ ОН cg-text-area */}
                     <div className="cg-text-area">
                         <div className="cg-header">
                             {stepData.icon}

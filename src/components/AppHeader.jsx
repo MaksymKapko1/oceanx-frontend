@@ -13,6 +13,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useWallets, useSignMessage } from '@privy-io/react-auth/solana';
 import {createPortal} from "react-dom";
 import bs58 from 'bs58';
+import {toast} from "sonner";
 
 const BUILDER_CODE = "redwingss";
 const MAX_FEE_RATE = "0.001";
@@ -21,7 +22,7 @@ export default function AppHeader() {
     const { identityToken } = useIdentityToken();
     const { user } = usePrivy();
     const { wallets } = useWallets();
-    const { signMessage } = useSignMessage(); // 👈 Достаем метод подписи для Solana
+    const { signMessage } = useSignMessage();
 
     const walletAddress = user?.wallet?.address;
 
@@ -75,13 +76,12 @@ export default function AppHeader() {
 
     const handleApproveBuilder = async () => {
         if (!wallets || wallets.length === 0) {
-            alert("Wallet not ready. Please wait or reconnect.");
+            toast.error("Wallet not ready. Please wait or reconnect.");
             return;
         }
         setIsApproving(true);
 
         try {
-            // Ищем нужный кошелек (Phantom / Solana)
             const selectedWallet = wallets.find(w => w.address === walletAddress)
                 || wallets.find(w => w.walletClientType === 'phantom')
                 || wallets[0];
@@ -109,10 +109,8 @@ export default function AppHeader() {
 
             const messageString = stringifySorted(payloadToSign);
 
-            // 👈 1. Переводим строку в Uint8Array, как требует Privy Solana SDK
             const messageUint8Array = new TextEncoder().encode(messageString);
 
-            // 👈 2. Вызываем подпись через useSignMessage
             const { signature: signatureUint8Array } = await signMessage({
                 message: messageUint8Array,
                 wallet: selectedWallet,
@@ -123,13 +121,12 @@ export default function AppHeader() {
                 }
             });
 
-            // 👈 3. Кодируем результат в base58
             const signatureBase58 = bs58.encode(signatureUint8Array);
 
             const finalPayload = {
                 account: walletAddress,
                 agent_wallet: null,
-                signature: signatureBase58, // 👈 4. Передаем готовую подпись
+                signature: signatureBase58,
                 timestamp: timestamp,
                 expiry_window: 60000,
                 builder_code: BUILDER_CODE,
@@ -148,7 +145,7 @@ export default function AppHeader() {
             try {
                 pacificaResult = JSON.parse(responseText);
             } catch (e) {
-                pacificaResult = { error: responseText || "Unknown Pacifica Error" }; // Ловит текстовые ошибки типа "Invalid message"
+                pacificaResult = { error: responseText || "Unknown Pacifica Error" };
             }
 
             if (pacificaResponse.ok && !pacificaResult.error) {
@@ -159,16 +156,15 @@ export default function AppHeader() {
 
                 setIsBuilderApproved(true);
                 setShowActivationModal(false);
-                alert("OceanX Builder activated! You are ready to trade.");
+                toast.success("OceanX Builder activated! You are ready to trade.");
             } else {
-                console.error("Биржа отклонила запрос:", pacificaResult);
-                alert(`Error: ${pacificaResult.error || 'Check console'}`);
+                toast.error(pacificaResult.error || "Exchange error");
             }
 
         } catch (err) {
             console.error("Error signing builder code:", err);
             if (err.message?.includes("User rejected")) {
-                alert("Activation has been declined in the wallet.");
+                toast.warning("Activation declined in the wallet.");
             }
         } finally {
             setIsApproving(false);
@@ -222,8 +218,6 @@ export default function AppHeader() {
                                 </div>
                             )}
                         </div>
-                        {/*<NavLink to="/stats" id="step-market-stats" className={getLinkClass}>Stats</NavLink>*/}
-                        {/*<NavLink to="/heatmaps" id="step-heatmaps" className={getLinkClass}>Heatmaps</NavLink>*/}
                     </nav>
                 </div>
 
@@ -251,13 +245,13 @@ export default function AppHeader() {
                             disabled={isApproving}
                             style={{
                                 display: 'flex', alignItems: 'center', gap: '6px',
-                                background: 'linear-gradient(90deg, #0891b2, #0284c7)', // 👈 Поменяли цвета
+                                background: 'linear-gradient(90deg, #0891b2, #0284c7)',
                                 color: 'white',
-                                border: '1px solid rgba(34, 211, 238, 0.4)', // 👈 Добавили бордер
+                                border: '1px solid rgba(34, 211, 238, 0.4)',
                                 padding: '8px 16px',
                                 borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer',
                                 opacity: isApproving ? 0.7 : 1,
-                                boxShadow: '0 0 15px rgba(8, 145, 178, 0.3)' // 👈 Добавили легкое свечение
+                                boxShadow: '0 0 15px rgba(8, 145, 178, 0.3)'
                             }}
                         >
                             <Zap size={16} color="#22d3ee" fill="#22d3ee" />
@@ -294,12 +288,10 @@ export default function AppHeader() {
                 />
             )}
 
-            {/* Модалка активации Билдер-кода */}
             {walletAddress && showActivationModal && createPortal(
                 <div className="builder-modal-overlay">
                     <div className="builder-modal-content">
                         <div className="builder-modal-icon">
-                            {/* 👈 Изменили цвет молнии на фирменный циановый */}
                             <Zap size={36} color="#22d3ee" fill="#22d3ee" />
                         </div>
                         <h2>Almost done!</h2>
@@ -308,7 +300,6 @@ export default function AppHeader() {
                             you need to activate builder code.
                         </p>
                         <div className="builder-modal-features">
-                            {/* 👈 Убрали эмодзи, галочки теперь рисует CSS */}
                             <div className="feature-item">1-Click Copy Trading</div>
                             <div className="feature-item">Best UX</div>
                             <div className="feature-item">Fast transaction processing</div>
@@ -330,6 +321,5 @@ export default function AppHeader() {
                 document.body
             )}
         </header>
-
     );
 }

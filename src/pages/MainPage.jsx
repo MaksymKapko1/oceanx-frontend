@@ -1,8 +1,8 @@
 import React from 'react';
-import {ArrowRight, Copy, Wallet, TrendingUp, Map, BarChart2, FireExtinguisherIcon, FlameIcon} from 'lucide-react';
+import {ArrowRight, Copy, Wallet, TrendingUp, Map, BarChart2, FlameIcon} from 'lucide-react';
 import { NavLink, Link } from 'react-router-dom';
 import './MainPage.css';
-import OnboardingGuide from "../components/OnboardGuide/OnboardingGuide.jsx";
+;
 
 
 import heroTerminalImg from '../assets/hero-terminal.png';
@@ -22,35 +22,35 @@ export default function MainPage() {
             title: "One Click Copy Trading",
             icon: <Copy size={32} className="feature-icon text-blue" />,
             desc: "Mirror the moves of elite traders in real-time. Automate your portfolio growth with seamless, one-click execution and follow the smart money.",
-            path: "/copytrading", // 🔥 Укажи тут свой точный роут для копитрейдинга (например /copytrade)
+            path: "/copytrading",
             actionText: "Copy Traders"
         },
         {
             title: "Heatmaps",
             icon: <Map size={32} className="feature-icon text-green" />,
             desc: "Gain a bird's-eye view of the market. Visualize liquidity clusters, whale activity, and price intensity across all 60+ Pacifica trading pairs.",
-            path: "/heatmaps", // 🔥 Роут для хитмапов
+            path: "/heatmaps",
             actionText: "Open Heatmaps"
         },
         {
             title: "Liquidations",
             icon: <FlameIcon size={32} className="feature-icon text-orange" />,
             desc: "Monitor the market's pressure points. Track real-time forced liquidations and leverage wipeouts across all pairs to spot volatility spikes and potential reversals.",
-            path: "/liquidations", // 🔥 Роут для хитмапов
+            path: "/liquidations",
             actionText: "Open Liquidations"
         },
         {
             title: "Hedge Farm Funding",
             icon: <Wallet size={32} className="feature-icon text-red" />,
             desc: "Maximize your capital efficiency through automated yield strategies and diversified hedge protocols. Institutional-grade fund management, decentralized.",
-            path: "#", // Заглушка, пока страница не готова
+            path: "#",
             actionText: "Coming Soon"
         },
         {
             title: "Predictions via Pacifica",
             icon: <TrendingUp size={32} className="feature-icon text-purple" />,
             desc: "Anticipate the market's next move. Participate in high-stakes prediction markets and turn your technical insights into measurable rewards.",
-            path: "#", // Заглушка, пока страница не готова
+            path: "#",
             actionText: "Coming Soon"
         }
     ];
@@ -60,12 +60,9 @@ export default function MainPage() {
             <LiveTicker/>
 
             <section className="hero-section">
-                {/* 🔥 2. НОВЫЙ КОНТЕЙНЕР ДЛЯ ДВУХ КОЛОНОК 🔥 */}
                 <div className="hero-split-layout">
 
-                    {/* ЛЕВАЯ КОЛОНКА: Текст и Кнопки */}
                     <div className="hero-text-content">
-                        {/*<div className="hero-badge">Welcome to the future of DeFi</div>*/}
                         <h1 className="hero-title">
                             Dive into <span className="text-gradient">OceanX</span>
                         </h1>
@@ -89,7 +86,6 @@ export default function MainPage() {
                         </div>
                     </div>
 
-                    {/* ПРАВАЯ КОЛОНКА: Картинка в стекле */}
                     <div className="hero-visualizer glass-frame-wrapper">
                         <img
                             src={heroTerminalImg}
@@ -104,7 +100,6 @@ export default function MainPage() {
             <section className="features-section">
                 <div className="carousel-container">
                     {features.map((item, index) => {
-                        // Если путь '#', мы не используем Link, чтобы страница не прыгала наверх
                         const isComingSoon = item.path === "#";
 
                         return isComingSoon ? (
@@ -129,8 +124,6 @@ export default function MainPage() {
                                         {item.icon}
                                         <h3>{item.title}</h3>
                                         <p>{item.desc}</p>
-
-                                        {/* 🔥 Теперь текст на кнопке меняется в зависимости от карточки */}
                                         <div className="feature-action">
                                             <span>{item.actionText}</span>
                                             <ArrowRight size={16} />
@@ -142,7 +135,6 @@ export default function MainPage() {
                     })}
                 </div>
             </section>
-
             <Footer />
         </main>
     );

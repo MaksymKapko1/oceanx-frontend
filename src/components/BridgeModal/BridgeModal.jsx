@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { createPortal } from 'react-dom'; // 👈 Импортируем портал
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import './BridgeModal.css';
 
@@ -59,6 +59,6 @@ export default function BridgeModal({ onClose, recipientAddress }) {
                 </div>
             </div>
         </div>,
-        document.body // 👈 Рендерим в конец body
+        document.body
     );
 }

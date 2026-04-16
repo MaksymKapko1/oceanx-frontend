@@ -10,10 +10,8 @@ export default function OpenInterestBars({ topOI }) {
         }).format(val);
     };
 
-    // 1. Сначала отрезаем только топ-10
     const displayedOI = topOI.slice(0, 20);
 
-    // 2. Считаем максимум только по этим десяти (чтобы полоски были красивые)
     const maxOI = Math.max(...displayedOI.map(v => v.open_interest), 1);
 
     return (

@@ -1,6 +1,3 @@
-/* =========================================
-   ГЛАВНЫЕ КОНТЕЙНЕРЫ (С защитой от растягивания)
-========================================= */
 * {
     box-sizing: border-box;
 }
@@ -9,15 +6,14 @@
     padding-top: 90px !important;
     padding-bottom: 80px;
     max-width: 1400px;
-    width: 100%; /* Ограничиваем ширину */
+    width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 80px;
-    overflow-x: hidden; /* Железно отрезаем всё, что вылазит за края */
+    overflow-x: hidden;
 }
 
-/* --- HERO СЕКЦИЯ --- */
 .hero-section {
     padding: 0 40px;
     width: 100%;
@@ -59,7 +55,6 @@
     margin-bottom: 40px;
 }
 
-/* --- КНОПКИ --- */
 .hero-actions {
     display: flex;
     gap: 16px;
@@ -103,7 +98,6 @@
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* --- HERO SPLIT LAYOUT --- */
 .hero-split-layout {
     display: flex;
     align-items: center;
@@ -130,7 +124,6 @@
     justify-content: flex-start;
 }
 
-/* --- ПРАВАЯ КОЛОНКА (КАРТИНКА) --- */
 .hero-visualizer {
     flex: 1;
     display: flex;
@@ -166,12 +159,11 @@
     filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.5));
 }
 
-/* --- КАРУСЕЛЬ --- */
 .feature-link-wrapper {
     text-decoration: none;
     color: inherit;
     display: block;
-    flex-shrink: 0; /* Не дает сжимать карточки */
+    flex-shrink: 0;
 }
 
 .features-section {
@@ -197,7 +189,6 @@
     display: none;
 }
 
-/* --- КАРТОЧКА ФИЧИ --- */
 .feature-card {
     position: relative;
     min-width: 320px;
@@ -272,11 +263,6 @@
     margin-top: -80px;
 }
 
-
-/* =========================================
-   АДАПТИВ ДЛЯ MAIN PAGE (ПЛАНШЕТЫ И ТЕЛЕФОНЫ)
-========================================= */
-
 @media (max-width: 992px) {
     .hero-split-layout {
         flex-direction: column;
@@ -316,14 +302,13 @@
     }
 
     .hero-section {
-        padding: 0 16px; /* Чуть меньше отступы на мобилке */
+        padding: 0 16px;
     }
 
     .hero-title {
         font-size: 2.8rem;
     }
 
-    /* Кнопки друг под другом на всю ширину */
     .hero-actions {
         flex-direction: column;
         width: 100%;
@@ -334,7 +319,6 @@
         width: 100%;
     }
 
-    /* КАРУСЕЛЬ: По одной карточке на экране */
     .carousel-container {
         padding: 10px 16px;
     }

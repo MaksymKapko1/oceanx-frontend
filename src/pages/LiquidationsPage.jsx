@@ -1,6 +1,6 @@
 import React from 'react';
-import LiquidationsTable from '../components/LiquidationsTable'; // Убедись, что путь правильный
-import './MainPage.css'; // Используем общие стили для отступов
+import LiquidationsTable from '../components/LiquidationsTable';
+import './MainPage.css';
 
 export default function LiquidationsPage() {
     return (

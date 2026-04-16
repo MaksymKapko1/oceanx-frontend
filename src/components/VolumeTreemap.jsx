@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createPortal } from 'react-dom'; // 👈 ВАЖНО: ИМПОРТИРУЕМ ПОРТАЛ!
+import { createPortal } from 'react-dom';
 import './MarketOverview.css';
 
 export default function VolumeTreemap({ topVolume }) {

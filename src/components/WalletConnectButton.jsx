@@ -75,11 +75,9 @@ export default function WalletConnectButton({ isMobile = false, onClick }) {
 
     const truncateAddress = (address) => {
         if (!address) return '';
-        // Формат остается хорошим: 0x...DfGh
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     };
 
-    // Отдельная логика для логаута из меню
     const handleLogout = (e) => {
         e.stopPropagation(); // Чтобы hover не дергался
         logout();
@@ -190,12 +188,6 @@ export default function WalletConnectButton({ isMobile = false, onClick }) {
                         </div>
 
                         <div className="dropdown-divider"></div>
-
-                        {/*<button className="dropdown-item">*/}
-                        {/*    <User size={16} />*/}
-                        {/*    <span>Profile & Stats</span>*/}
-                        {/*</button>*/}
-
                         <button className="dropdown-item text-red" onClick={handleLogout}>
                             <LogOut size={16} />
                             <span>Disconnect</span>

@@ -31,37 +31,26 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
             setLoading(true);
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
-            // 1. Ищем ИМЕННО Solana-аккаунт в привязанных профилях Privy
             let solanaAccount = user.linkedAccounts.find(acc => acc.chainType === 'solana');
 
-            // 2. Если Solana-кошелек не привязан к аккаунту Privy
             if (!followed && !solanaAccount) {
-                console.log("🌐 Solana не привязана. Открываем окно привязки Phantom...");
-                // Это откроет модалку Privy. После успешной привязки нужно будет нажать Follow еще раз.
                 await linkWallet();
                 return;
             }
 
-            // Теперь мы точно знаем, что у нас есть Solana адрес (или мы в режиме Unfollow)
             let userWallet = solanaAccount?.address || user.wallet.address;
 
             if (!followed) {
-                console.log("🔍 Проверяем статус агента для адреса:", userWallet);
                 const statusRes = await fetch(`${baseUrl}/api/auth/status/${userWallet}`);
                 const statusData = await statusRes.json();
 
-                // 3. Если агента нет в БД — создаем его
-                if (statusData.success && !statusData.has_agent) {
-                    console.log("⚡ Агента нет. Запускаем создание...");
-                    // Вызываем хук, который теперь сам найдет правильный кошелек внутри Privy
+                if (statusData.success && !statusData.has_agent) {;
                     const trueSolanaAddress = await bindAndSaveAgent();
 
-                    // Если адрес изменился (например, юзер выбрал другой в Phantom), обновляем
                     if (trueSolanaAddress) userWallet = trueSolanaAddress;
                 }
             }
 
-            // 4. Выполняем подписку/отписку
             const endpoint = followed ? '/api/copy/unfollow' : '/api/copy/follow';
 
             const response = await privateFetch(`${baseUrl}${endpoint}`, {
@@ -79,14 +68,12 @@ export default function FollowButton({ masterAddress, initialFollowed, onToggle,
                 const newStatus = !followed;
                 setFollowed(newStatus);
                 if (onToggle) onToggle(masterAddress, newStatus);
-                console.log(`✅ Успешно. Теперь Following: ${newStatus}`);
+                console.log(`✅ Following: ${newStatus}`);
             } else {
-                console.error("❌ Полный ответ бэкенда:", data);
-                console.error("❌ Backend Error:", data.error);
-                alert(`Ошибка: ${data.error}`);
+                console.error(`❌ Follow Error: ${data.error}`);
             }
         } catch (err) {
-            console.error("🔴 Ошибка в процессе Follow:", err);
+            console.error("🔴 Follow process error:", err);
         } finally {
             setLoading(false);
         }

@@ -32,7 +32,6 @@ export default function SummaryCards({ stats, loading }) {
             <div className="stat-card">
                 <div className="stat-label text-cyan">24H Liquidations</div>
                 <div className="stat-value">
-                    {/* Заглушка, пока нет данных с бэка */}
                     {loading ? "..." : formatCurrency(stats.liquidations_24h)}
                 </div>
             </div>

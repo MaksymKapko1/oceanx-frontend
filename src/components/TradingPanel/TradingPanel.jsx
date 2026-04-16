@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Zap, ArrowLeftRight, ShieldCheck, Info } from 'lucide-react';
+import { Zap, ArrowLeftRight} from 'lucide-react';
 import './TradingPanel.css';
 
 export default function TradingPanel({ primaryAsset }) {
-    const [mode, setMode] = useState('simple'); // 'simple' | 'pair'
-    const [side, setSide] = useState('long'); // 'long' | 'short'
+    const [mode, setMode] = useState('simple');
+    const [side, setSide] = useState('long');
     const [assetB, setAssetB] = useState('ETH');
     const [amount, setAmount] = useState('');
 
     return (
         <div className="trading-panel-root">
-            {/* Переключатель режимов */}
             <div className="mode-selector-pill">
                 <button
                     className={`mode-btn ${mode === 'simple' ? 'active' : ''}`}
@@ -27,7 +26,6 @@ export default function TradingPanel({ primaryAsset }) {
             </div>
 
             <div className="trade-config-box">
-                {/* Выбор стороны (только для Simple) */}
                 {mode === 'simple' && (
                     <div className="side-selector">
                         <button className={`side-btn long ${side === 'long' ? 'active' : ''}`} onClick={() => setSide('long')}>LONG</button>
@@ -35,7 +33,6 @@ export default function TradingPanel({ primaryAsset }) {
                     </div>
                 )}
 
-                {/* Активы */}
                 <div className="assets-config">
                     <div className="asset-row">
                         <span className="label">{mode === 'pair' ? 'Long (A)' : 'Asset'}</span>
@@ -63,7 +60,6 @@ export default function TradingPanel({ primaryAsset }) {
                     )}
                 </div>
 
-                {/* Инпуты */}
                 <div className="input-field">
                     <div className="field-header">
                         <span>Margin (USD)</span>
@@ -78,14 +74,12 @@ export default function TradingPanel({ primaryAsset }) {
                     />
                 </div>
 
-                {/* Кнопка исполнения */}
                 <button className={`execute-trade-btn ${mode === 'pair' ? 'pair-neon' : side}`}>
                     {mode === 'pair' ? <ArrowLeftRight size={18} /> : <Zap size={18} />}
                     <span>
                         {mode === 'pair' ? 'Execute Atomic Pair' : `${side.toUpperCase()} ${primaryAsset}`}
                     </span>
                 </button>
-
             </div>
         </div>
     );

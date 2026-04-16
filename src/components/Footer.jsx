@@ -6,7 +6,6 @@ export default function Footer() {
         <footer className="app-footer">
             <div className="footer-content">
 
-                {/* Левая часть: Бренд */}
                 <div className="footer-brand">
                     <h3 className="footer-logo">Ocean<span>X</span></h3>
                     <p className="footer-desc">
@@ -16,7 +15,6 @@ export default function Footer() {
                     <span className="footer-copyright">© 2026 OceanX. All rights reserved.</span>
                 </div>
 
-                {/* Правая часть: Ссылки */}
                 <div className="footer-links-grid">
 
                     <div className="footer-column">
@@ -38,7 +36,6 @@ export default function Footer() {
                         <a href="#">Terms of Service</a>
                         <a href="#">Privacy Policy</a>
                     </div>
-
                 </div>
             </div>
         </footer>

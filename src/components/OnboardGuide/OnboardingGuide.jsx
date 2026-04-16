@@ -20,13 +20,13 @@ const GUIDE_STEPS = [
         title: "Copy Trading",
         text: "Don't want to spend all day staring at charts? In this section, you can choose top traders with proven track records and automatically copy their trades. It’s the perfect way to earn passive income and learn from the pros while the system works for you. (Under development)",
         icon: <TrendingUp size={28} className="step-icon text-blue" />,
-        targetId: "step-copy-trading", // ID ссылки в меню
+        targetId: "step-copy-trading",
     },
     {
         title: "Heatmaps",
         text: "Heatmaps are your market X-ray. They reveal exactly where big players are placing their limit orders (liquidity). Use this tool to identify strong support and resistance levels and trade alongside the whales, not against them!",
         icon: <Map size={28} className="step-icon text-orange" />,
-        targetId: "step-heatmaps", // ID ссылки в меню
+        targetId: "step-heatmaps",
     }
 ];
 
@@ -35,7 +35,6 @@ export default function OnboardingGuide() {
     const [currentStep, setCurrentStep] = useState(0);
     const [cardStyle, setCardStyle] = useState({});
 
-    // Открытие гайда
     useEffect(() => {
         const hasSeenGuide = localStorage.getItem('pacifica_guide_seen');
         if (!hasSeenGuide) {
@@ -43,7 +42,6 @@ export default function OnboardingGuide() {
         }
 
         const handleOpenGuide = () => {
-            console.log("🔥 ИВЕНТ ПОЙМАН! Открываем гайд..."); // <--- ДОБАВЬ ЭТО
             setCurrentStep(0);
             setIsOpen(true);
         };
@@ -51,13 +49,11 @@ export default function OnboardingGuide() {
         return () => window.removeEventListener('open-guide', handleOpenGuide);
     }, []);
 
-    // Расчет позиции карточки относительно элемента
     useEffect(() => {
         if (!isOpen) return;
 
         const step = GUIDE_STEPS[currentStep];
 
-        // Убираем подсветку со всех прошлых элементов
         document.querySelectorAll('.guide-highlight-target').forEach(el => {
             el.classList.remove('guide-highlight-target');
         });
@@ -65,19 +61,14 @@ export default function OnboardingGuide() {
         if (step.targetId) {
             const el = document.getElementById(step.targetId);
             if (el) {
-                // Подсвечиваем целевой элемент
                 el.classList.add('guide-highlight-target');
 
-                // Вычисляем координаты
                 const rect = el.getBoundingClientRect();
 
-                // Центр кнопки, на которую нужно указать
                 const targetCenter = rect.left + rect.width / 2;
 
-                // Ширина плашки (около 800px, но берем с запасом для мобилок)
                 const modalWidth = window.innerWidth > 800 ? 800 : window.innerWidth - 40;
 
-                // Идеальная позиция плашки (по центру), но не даем ей уехать за края экрана
                 let modalLeft = targetCenter - modalWidth / 2;
                 const minMargin = 20;
 
@@ -86,7 +77,6 @@ export default function OnboardingGuide() {
                     modalLeft = window.innerWidth - modalWidth - minMargin;
                 }
 
-                // 🔥 УМНАЯ СТРЕЛОЧКА: Считаем, где она должна быть относительно плашки
                 const arrowLeft = targetCenter - modalLeft;
 
                 setCardStyle({
@@ -94,13 +84,12 @@ export default function OnboardingGuide() {
                     left: `${modalLeft}px`,
                     position: 'fixed',
                     transform: 'none',
-                    '--arrow-left': `${arrowLeft}px` // Передаем координату в CSS!
+                    '--arrow-left': `${arrowLeft}px`
                 });
                 return;
             }
         }
 
-        // Если нет ID — ставим по центру
         setCardStyle({
             top: '50%',
             left: '50%',
@@ -134,14 +123,11 @@ export default function OnboardingGuide() {
 
     return (
         <div className="guide-overlay">
-            {/* Карточка гайда (применяем стили позиции) */}
             <div className="guide-glass-modal" style={cardStyle}>
 
-                {/* Стрелочка, указывающая вверх (показывается только если есть цель) */}
                 {stepData.targetId && <div className="guide-arrow-up"></div>}
 
                 <div className="guide-content-wrapper">
-                    {/* Маскот */}
                     <div className="mascot-container">
                         <img
                             src={paciSharkImg}
@@ -151,7 +137,6 @@ export default function OnboardingGuide() {
                         <div className="mascot-name">Paci</div>
                     </div>
 
-                    {/* Текст */}
                     <div className="guide-text-area">
                         <div className="guide-header">
                             {stepData.icon}
@@ -173,7 +158,6 @@ export default function OnboardingGuide() {
                             </a>
                         )}
 
-                        {/* Кнопки и прогресс */}
                         <div className="guide-actions">
                             <button className="guide-skip-btn" onClick={closeGuide}>
                                 Skip <SkipForward size={14} />

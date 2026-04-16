@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePrivy } from "@privy-io/react-auth";
-import { Copy, Check, XCircle } from 'lucide-react'; // 👈 Добавили XCircle
+import { Copy, Check, XCircle } from 'lucide-react';
 import { getIdentityToken, useIdentityToken } from "@privy-io/react-auth";
 import "./MySybscriptions.css";
 import {privateFetch} from "../utils/pacificaUtils.js";
@@ -32,7 +32,7 @@ export default function MySubscriptions() {
                 setSubscriptions(activeBots);
             }
         } catch (err) {
-            console.error("Ошибка загрузки подписок:", err);
+            console.error("Subscription loading error:", err);
         } finally {
             setLoading(false);
         }
@@ -44,7 +44,6 @@ export default function MySubscriptions() {
         return () => clearInterval(interval);
     }, [authenticated, user?.wallet?.address]);
 
-    // 👈 ФУНКЦИЯ ОТПИСКИ
     const handleUnfollow = async (masterAddr) => {
         if (!window.confirm(`Are you sure you want to stop following ${masterAddr.slice(0,6)}...?`)) return;
 
@@ -59,11 +58,10 @@ export default function MySubscriptions() {
             const data = await res.json();
 
             if (data.success) {
-                // Оптимистично удаляем из списка сразу
                 setSubscriptions(prev => prev.filter(s => s.address !== masterAddr));
             }
         } catch (err) {
-            console.error("Ошибка при отписке:", err);
+            console.error("Error while unsubscribing:", err);
         }
     };
 
@@ -107,7 +105,6 @@ export default function MySubscriptions() {
                                 </div>
 
                                 <div className="sub-actions">
-                                    {/* 👈 КНОПКА ОТПИСКИ */}
                                     <button
                                         className="sub-unfollow-btn"
                                         onClick={() => handleUnfollow(addr)}
@@ -115,7 +112,6 @@ export default function MySubscriptions() {
                                     >
                                         <XCircle size={16} />
                                     </button>
-                                    {/*<button className="sub-settings-btn">⚙️</button>*/}
                                 </div>
                             </div>
                         );

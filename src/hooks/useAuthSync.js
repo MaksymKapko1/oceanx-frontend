@@ -26,13 +26,13 @@ export function useAuthSync() {
                     }, () => identityToken)
                     const data = await res.json();
                     if (data.success) {
-                        console.log('✅ Юзер успешно сохранен в БД:', data.user);
+                        console.log('✅ The user has been successfully saved to the database:', data.user);
                         hasSynced.current = true;
                     } else {
-                        console.error('❌ Бэкенд вернул ошибку при сохранении юзера:', data.error);
+                        console.error('❌ The backend returned an error when saving the user:', data.error);
                     }
                 } catch (err) {
-                    console.error('❌ Сетевая ошибка при синхронизации юзера:', err);
+                    console.error('❌ Network error during user synchronization:', err);
                 }
             }
             void syncUserWithBackend();

@@ -36,14 +36,12 @@ export default function UserTradingSection() {
         return Math.floor(maxExposure / volumePerTrade);
     }, [volumePerTrade, maxExposure]);
 
-    // Подгружаем список рынков
     useEffect(() => {
         if (stats?.top_volume) {
             setAvailableMarkets(stats.top_volume.map(m => m.symbol));
         }
     }, [stats]);
 
-    // Загружаем сохранённые настройки
     useEffect(() => {
         const fetchSettings = async () => {
             if (!authenticated || !walletAddress) { setIsLoading(false); return; }
@@ -109,7 +107,6 @@ export default function UserTradingSection() {
                 <>
                     <div className="settings-scroll-container">
 
-                        {/* БАЛАНС */}
                         <div className="balance-card">
                             <span className="balance-label">Trading Balance</span>
                             <span className="balance-value">
@@ -120,7 +117,6 @@ export default function UserTradingSection() {
                             </span>
                         </div>
 
-                        {/* VOLUME PER TRADE */}
                         <div className="setting-item">
                             <div className="setting-header">
                                 <span>Volume per Trade</span>
@@ -146,7 +142,6 @@ export default function UserTradingSection() {
                             />
                         </div>
 
-                        {/* MAX TOTAL EXPOSURE */}
                         <div className="setting-item">
                             <div className="setting-header">
                                 <span>Max Total Exposure</span>
@@ -175,7 +170,6 @@ export default function UserTradingSection() {
                             />
                         </div>
 
-                        {/* SLIPPAGE */}
                         <div className="setting-item">
                             <div className="setting-header">
                                 <span>Max Slippage</span>
@@ -198,7 +192,6 @@ export default function UserTradingSection() {
                             />
                         </div>
 
-                        {/* MARKETS */}
                         <div className="setting-item">
                             <div
                                 className="setting-header dropdown-trigger"

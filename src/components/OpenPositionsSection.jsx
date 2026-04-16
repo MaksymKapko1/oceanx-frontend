@@ -3,8 +3,8 @@ import './OpenPositionsSection.css';
 import { createPortal } from 'react-dom';
 import {usePrivy} from "@privy-io/react-auth";
 import { usePacificaAccount } from "../hooks/usePacificaAccount";
-import { Share2, Download, X } from 'lucide-react'; // 👈 Добавили иконки
-import html2canvas from 'html2canvas'; // 👈 Добавили генератор картинок
+import { Share2, Download, X } from 'lucide-react';
+import html2canvas from 'html2canvas';
 import { useIdentityToken, getIdentityToken } from "@privy-io/react-auth";
 import { privateFetch } from '../utils/pacificaUtils';
 
@@ -20,7 +20,6 @@ export default function OpenPositionsSection() {
     const [accountInfo, setAccountInfo] = useState({ ae: 0, cm: 0 });
     const [loading, setLoading] = useState(true);
 
-    // 👈 Стейт для открытой модалки PnL
     const [sharePos, setSharePos] = useState(null);
 
     const ws = useRef(null);
@@ -78,15 +77,14 @@ export default function OpenPositionsSection() {
     const formatNum = (val, decimals = 2) => parseFloat(val || 0).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
     const formatSize = (val) => parseFloat(val || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 });
 
-    // 👈 ФУНКЦИЯ ДЛЯ СКАЧИВАНИЯ КАРТИНКИ
     const downloadPnLImage = async () => {
         const element = document.getElementById('pnl-card-capture');
         if (!element) return;
 
         try {
             const canvas = await html2canvas(element, {
-                backgroundColor: null, // Прозрачный фон
-                scale: 2, // Высокое качество (Retina)
+                backgroundColor: null,
+                scale: 2,
                 useCORS: true
             });
             const dataUrl = canvas.toDataURL('image/png');
@@ -95,7 +93,7 @@ export default function OpenPositionsSection() {
             link.href = dataUrl;
             link.click();
         } catch (err) {
-            console.error("Ошибка генерации картинки:", err);
+            console.error("Image generation error:", err);
         }
     };
 
@@ -116,7 +114,6 @@ export default function OpenPositionsSection() {
             const data = await response.json();
             if (!response.ok) {
                 console.error("❌ Error closing position:", data.detail);
-                alert(`Error: ${data.detail}`);
             } else {
                 console.log(`✅ Success: ${pos.s} closed`);
             }
@@ -138,7 +135,6 @@ export default function OpenPositionsSection() {
             const data = await response.json();
             if (!response.ok) {
                 console.error("❌ Error closing all:", data.detail);
-                alert(`Error: ${data.detail}`);
             } else {
                 console.log("✅ Success: All positions closing initiated");
             }
@@ -211,7 +207,6 @@ export default function OpenPositionsSection() {
 
                                 <span className="liq-price">{liqPrice ? `$${formatNum(liqPrice, 2)}` : '---'}</span>
 
-                                {/* 👈 ДОБАВЛЕНА КНОПКА ПОДЕЛИТЬСЯ */}
                                 <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px'}}>
                                     <span className={`pnl-cell ${isProfit ? 'profit' : 'loss'}`} style={{display: 'flex', flexDirection: 'column', gap: '2px'}}>
                                         <span>{isProfit ? '+' : ''}${formatNum(pnl, 2)}</span>
@@ -249,13 +244,11 @@ export default function OpenPositionsSection() {
                 </button>
             </div>
 
-            {/* 👈 МОДАЛКА С КАРТОЧКОЙ ДЛЯ СКАЧИВАНИЯ */}
             {sharePos && createPortal (
                 <div className="pnl-modal-overlay" onClick={() => setSharePos(null)}>
                     <div className="pnl-modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="pnl-modal-close" onClick={() => setSharePos(null)}><X size={20}/></button>
 
-                        {/* КАРТОЧКА, КОТОРАЯ БУДЕТ СКРИНИТЬСЯ */}
                         <div id="pnl-card-capture" className={`pnl-share-card ${sharePos.isProfit ? 'profit-bg' : 'loss-bg'}`}>
                             <div className="pnl-card-header">
                                 <div className="pnl-logo">OceanX</div>
@@ -283,7 +276,6 @@ export default function OpenPositionsSection() {
                                     <strong>${formatNum(sharePos.mark, 4)}</strong>
                                 </div>
                                 <div className="pnl-qr-placeholder">
-                                    {/* Сюда можно вставить мини QR код на твой сайт */}
                                     oceanx
                                 </div>
                             </div>

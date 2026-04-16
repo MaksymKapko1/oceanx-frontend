@@ -7,7 +7,6 @@ export default function LiquidationsTable() {
     const PAGE_SIZE = 20;
     const {stats} = useMarketStats();
 
-    // Динамический список монет
     const availableMarkets = useMemo(() => {
         if (stats && stats.top_volume) {
             const symbols = stats.top_volume.map(market => market.symbol);
@@ -20,7 +19,7 @@ export default function LiquidationsTable() {
     const [summary, setSummary] = useState({ total_usd: 0, long_usd: 0, short_usd: 0 });
     const [loading, setLoading] = useState(true);
 
-    // Стейты фильтров и дропдауна
+
     const [filterCoin, setFilterCoin] = useState('ALL');
     const [isCoinDropdownOpen, setIsCoinDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -34,7 +33,6 @@ export default function LiquidationsTable() {
 
     const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
 
-    // ЗАГРУЗКА ИСТОРИИ И СТАТИСТИКИ
     const fetchLiquidations = useCallback(async (currentOffset, isNewFilter = false) => {
         try {
             if (isNewFilter) setLoading(true);
@@ -55,7 +53,7 @@ export default function LiquidationsTable() {
                 else setHasMore(true);
             }
         } catch (err) {
-            console.error("❌ Ошибка загрузки ликвидаций:", err);
+            console.error("❌ Can't load liqs:", err);
         } finally {
             setLoading(false);
             setLoadingMore(false);
@@ -114,7 +112,6 @@ export default function LiquidationsTable() {
 
     return (
         <div className="lb-wrapper">
-            {/* ВЕРХНИЕ КАРТОЧКИ (SUMMARY) */}
             <div style={{marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
                 <div className="lb-container" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{ background: 'rgba(34, 211, 238, 0.1)', padding: '10px', borderRadius: '12px' }}>
@@ -148,7 +145,6 @@ export default function LiquidationsTable() {
             </div>
 
             <div className="lb-container">
-                {/* HEADER С ФИЛЬТРАМИ */}
                 <div className="lb-header">
                     <div className="lb-title-side">
                         <Flame color="#ff4d4d" size={20} />
@@ -156,7 +152,6 @@ export default function LiquidationsTable() {
                     </div>
 
                     <div className="lb-controls-wrapper">
-                        {/* Группа 1: Таймфрейм */}
                         <div className="lb-button-group">
                             <button
                                 className={`lb-control-btn ${timeRange === '24h' ? 'active' : ''}`}
@@ -170,7 +165,6 @@ export default function LiquidationsTable() {
 
                         <div className="lb-divider"></div>
 
-                        {/* Группа 2: Сортировка */}
                         <button
                             className="lb-control-btn sort-btn"
                             onClick={() => setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc')}
@@ -180,7 +174,6 @@ export default function LiquidationsTable() {
 
                         <div className="lb-divider"></div>
 
-                        {/* Группа 3: Динамический Dropdown Монет */}
                         <div className="lb-dropdown" onMouseLeave={() => setIsCoinDropdownOpen(false)}>
                             <div
                                 className={`lb-dropdown-trigger ${isCoinDropdownOpen ? 'active' : ''}`}
@@ -207,7 +200,6 @@ export default function LiquidationsTable() {
                     </div>
                 </div>
 
-                {/* ТАБЛИЦА */}
                 <div className="lb-columns" style={{ gridTemplateColumns: '1fr 1fr 1.5fr 1fr 1fr 1.2fr' }}>
                     <span>Time</span>
                     <span>Symbol</span>

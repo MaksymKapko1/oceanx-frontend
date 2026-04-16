@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import ReactECharts from 'echarts-for-react';
 
-/**
- * Orderbook Heatmap — ПОЛНЫЙ КОД со всеми твоими стилями
- */
-
 const MAX_HISTORY = 120;
 const TARGET_ROWS = 40;
 
@@ -29,7 +25,6 @@ const HeatmapProView = ({ symbol = '?', orderbook }) => {
     const priceStepRef          = useRef(null);
     const lastTimeRef           = useRef(null);
 
-    // 🔥 ВОТ ОНО: Добавленное исправление для сброса при смене тикера
     useEffect(() => {
         priceStepRef.current = null;
         setHistory([]);
@@ -322,7 +317,7 @@ const HeatmapProView = ({ symbol = '?', orderbook }) => {
                     fontSize: '14px',
                 }}>
                     <div style={{ fontSize: 32 }}>📊</div>
-                    Ожидание данных ордербука...
+                    Waiting for order book data...
                 </div>
             )}
         </div>

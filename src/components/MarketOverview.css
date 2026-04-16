@@ -2,9 +2,6 @@
     box-sizing: border-box;
 }
 
-/* =========================================
-   1. ВЕРХНИЕ КАРТОЧКИ (SummaryCards)
-========================================= */
 .stats-grid-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -45,15 +42,11 @@
     font-family: 'JetBrains Mono', monospace, sans-serif;
 }
 
-/* Акцентные цвета текстов */
 .text-green { color: #4ade80; }
 .text-gold { color: #facc15; }
 .text-cyan { color: #22d3ee; }
 .text-violet { color: #8b5cf6; }
 
-/* =========================================
-   2. СЕТКА ГРАФИКОВ (Общий контейнер)
-========================================= */
 .charts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -82,9 +75,6 @@
     color: white;
 }
 
-/* =========================================
-   3. TREEMAP (Квадраты объемов)
-========================================= */
 .treemap-container {
     display: flex;
     width: 100%;
@@ -147,9 +137,6 @@
     .treemap-col .tm-symbol { display: none; }
 }
 
-/* =========================================
-   4. OPEN INTEREST (Полоски графиков)
-========================================= */
 .chart-bars {
     display: flex;
     flex-direction: column;
@@ -212,9 +199,6 @@
     font-family: 'JetBrains Mono', monospace;
 }
 
-/* =========================================
-   5. КАСТОМНЫЙ ТУЛТИП
-========================================= */
 .custom-treemap-tooltip {
     pointer-events: none;
     z-index: 9999;
@@ -232,9 +216,6 @@
 .tooltip-symbol { font-size: 0.9rem; font-weight: 700; color: white; letter-spacing: 0.5px; }
 .tooltip-value { font-size: 0.8rem; font-weight: 500; color: rgba(255, 255, 255, 0.6); font-family: 'JetBrains Mono', monospace; }
 
-/* =========================================
-   6. ИДЕАЛЬНАЯ АДАПТИВНОСТЬ (Мобилки и Планшеты)
-========================================= */
 
 @media (max-width: 1200px) {
     .stats-grid-container { grid-template-columns: repeat(3, 1fr); }
@@ -249,7 +230,6 @@
 }
 
 @media (max-width: 768px) {
-    /* Верхние статы (ВСЕГДА 2 колонки на мобилках) */
     .stats-grid-container {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px;
@@ -260,19 +240,17 @@
     }
 
     .stat-label {
-        font-size: 0.75rem; /* Чуть меньше шрифт заголовка, чтобы влезал */
+        font-size: 0.75rem;
     }
 
     .stat-value {
-        font-size: 1.15rem; /* Цифры чуть меньше, чтобы не ломали карточку */
+        font-size: 1.15rem;
     }
 }
 
 @media (max-width: 480px) {
-    /* Графики на маленьких телефонах */
     .chart-card {
         padding: 16px;
     }
 
-    /* Убираем 1fr для статс-контейнера, чтобы он оставался 2x2, как в правиле выше */
 }
