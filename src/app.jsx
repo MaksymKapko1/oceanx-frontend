@@ -9,6 +9,7 @@ import LiquidationsPage from "./pages/LiquidationsPage.jsx";
 import React from "react";
 import {useAuthSync} from "./hooks/useAuthSync.js";
 import {Toaster} from 'sonner';
+import StrategiesPage from "./pages/StrategiesPage.jsx";
 
 function App() {
     useAuthSync();
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/heatmaps" element={<HeatmapPage />} />
                     <Route path="/copytrading" element={<CopyTradingPage />} />
                     <Route path="/liquidations" element={<LiquidationsPage />} />
+                    <Route path="/strategies" element={<StrategiesPage />} />
                 </Routes>
                 <OnboardingGuide/>
             </>

@@ -27,7 +27,7 @@ export function useMarketStats() {
             }
         };
 
-        fetchAll();
+        void fetchAll();
         const interval = setInterval(fetchAll, 10000); // синхронно с бэком
         return () => clearInterval(interval);
     }, []);

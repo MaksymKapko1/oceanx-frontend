@@ -1,0 +1,67 @@
+/* Главный контейнер */
+.strategies-page {
+    width: 96%;
+    max-width: 1920px;
+    margin: 0 auto;
+    /* 100px сверху защищают от наезда под фиксированный глобальный navbar */
+    padding: 100px 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-height: auto;
+    box-sizing: border-box;
+}
+
+/* МАГИЯ СЕТКИ: 2fr (две части) и 1fr (одна часть) */
+.strategies-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.strategies-main-column {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    height: 700px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+/* Секция с настройками (Правая) */
+.strategies-sidebar-column {
+    align-self: flex-start; /* Чтобы панель не растягивалась по высоте графика, если он длинный */
+    position: sticky;
+    top: 100px; /* Прилипает при скролле */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    /* Тот самый красивый Glassmorphism из твоего дизайна */
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+/* Заглушка для текста */
+.placeholder-text {
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    margin: auto;
+}
+
+/* АДАПТИВНОСТЬ: На мобильных и планшетах (меньше 1200px) делаем всё в одну колонку */
+@media (max-width: 1200px) {
+    .strategies-content-grid {
+        grid-template-columns: 1fr; /* 1 колонка */
+    }
+    .strategies-sidebar-column {
+        position: static; /* Выключаем прилипание на мобилке */
+    }
+}

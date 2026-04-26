@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Menu, X, BookOpen, Zap, BarChart2, ChevronDown, Flame} from 'lucide-react';
+import {Menu, X, BookOpen, Zap, BarChart2, ChevronDown, Flame, ChartLine} from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { ArrowLeftRight } from 'lucide-react';
 import WalletConnectButton from './WalletConnectButton';
@@ -218,6 +218,7 @@ export default function AppHeader() {
 
                     <nav className="glass-btn desktop-nav" style={{ marginLeft: '20px' }}>
                         <NavLink to="/copytrading" id="step-copy-trading" className={getLinkClass}>Copy Trading</NavLink>
+                        <NavLink to="/strategies" className={getLinkClass}>Strategies</NavLink>
                         <div
                             className="nav-dropdown-wrapper"
                             onMouseEnter={() => setIsStatsHovered(true)}
@@ -305,6 +306,7 @@ export default function AppHeader() {
                     <NavLink to="/stats" className={getMobileLinkClass} onClick={closeMenu}>Stats</NavLink>
                     <NavLink to="/heatmaps" className={getMobileLinkClass} onClick={closeMenu}>Heatmaps</NavLink>
                     <NavLink to="/liquidations" className={getMobileLinkClass} onClick={closeMenu}>Liquidations</NavLink>
+                    <NavLink to="/strategies" className={getMobileLinkClass} onClick={closeMenu}>Strategies</NavLink>
                 </div>
             )}
 
