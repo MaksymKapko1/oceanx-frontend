@@ -43,8 +43,31 @@ export default function StrategiesTradingPanelComponent({ markets }) {
                 alert("Network error. Check console.");
             }
         } else {
-            alert(`Executing HEDGE order (Batch):\nLONG: ${hedgeLongCoin} ($${hedgeSize})\nSHORT: ${hedgeShortCoin} ($${hedgeSize})`);
-            // Тут позже вызовем API Pacifica (batch_order)
+            if (!hedgeLongCoin || !hedgeShortCoin || parseFloat(hedgeSize) <= 22) {
+                alert("Please enter valid coins and a size (min $11)!");
+                return;
+            }
+
+            try {
+                const response = await privateFetch(`${baseUrl}/api/manual-trades/hedge`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        longSymbol: hedgeLongCoin,
+                        shortSymbol: hedgeShortCoin,
+                        size_usd: parseFloat(hedgeSize),
+                    })
+                }, () => identityToken);
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alert(`✅ Hedge Executed!\nLong: ${hedgeLongCoin}\nShort: ${hedgeShortCoin}`);
+                } else {
+                    alert(`❌ Failed to execute hedge:\n${result.detail || result.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error("Error executing hedge:", error);
+                alert("Network error. Check console.");
+            }
         }
     };
 
