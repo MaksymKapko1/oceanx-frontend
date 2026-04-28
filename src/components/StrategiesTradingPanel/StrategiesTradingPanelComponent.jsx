@@ -52,8 +52,8 @@ export default function StrategiesTradingPanelComponent({ markets }) {
                 const response = await privateFetch(`${baseUrl}/api/manual-trades/hedge`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        longSymbol: hedgeLongCoin,
-                        shortSymbol: hedgeShortCoin,
+                        long_symbol: hedgeLongCoin,
+                        short_symbol: hedgeShortCoin,
                         size_usd: parseFloat(hedgeSize),
                     })
                 }, () => identityToken);
