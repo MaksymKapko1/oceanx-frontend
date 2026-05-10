@@ -7,16 +7,16 @@ import BridgeModal from "./BridgeModal/BridgeModal.jsx";
 import './AppHeader.css';
 import { getIdentityToken, useIdentityToken } from "@privy-io/react-auth";
 import { privateFetch } from '../utils/pacificaUtils';
-
-
 import { usePrivy } from "@privy-io/react-auth";
 import { useWallets, useSignMessage } from '@privy-io/react-auth/solana';
 import {createPortal} from "react-dom";
 import bs58 from 'bs58';
 import {toast} from "sonner";
 
+// --- КОНСТАНТЫ ---
 const BUILDER_CODE = "redwingss";
-const MAX_FEE_RATE = "0.001";
+const MAX_FEE_RATE = "0.01"; // Новая комиссия
+const ADMIN_WALLET = "97TqKNTw7ZgHWpUDs2mYn4f1TWeLnGNFTRn3QufgD5Gh"; // Вставь свой кошелек
 
 export default function AppHeader() {
     const { identityToken } = useIdentityToken();
@@ -28,64 +28,52 @@ export default function AppHeader() {
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const location = useLocation();
-
     const [isBridgeOpen, setIsBridgeOpen] = useState(false);
 
     const [isBuilderApproved, setIsBuilderApproved] = useState(true);
     const [isApproving, setIsApproving] = useState(false);
     const [showActivationModal, setShowActivationModal] = useState(false);
-
-    const [isStatsHovered, setIsStatsHovered] = useState(false)
+    const [isStatsHovered, setIsStatsHovered] = useState(false);
 
     const getLinkClass = ({ isActive }) => isActive ? 'nav-link active' : 'nav-link';
     const getMobileLinkClass = ({ isActive }) => isActive ? "mobile-link active" : "mobile-link";
-
     const closeMenu = () => setIsMobileMenuOpen(false);
 
     useEffect(() => {
         if (!walletAddress) return;
-        if (!identityToken) {
-            console.log('[BuilderStatus] identityToken not ready yet, skipping');
-            return;
-        }
+        if (!identityToken) return;
 
         const checkStatus = async () => {
             const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8001';
-            console.log(`[BuilderStatus] Checking for wallet: ${walletAddress}, baseUrl: ${baseUrl}`);
 
             try {
-                console.log('[BuilderStatus] → Fetching from own backend...');
-                const cachedRes = await privateFetch(
-                    `${baseUrl}/api/user/builder-status`,
-                    { method: 'GET' },
-                    () => identityToken
-                );
+                // 1. Проверяем БД
+                const cachedRes = await privateFetch(`${baseUrl}/api/user/builder-status`, { method: 'GET' }, () => identityToken);
                 const cachedData = await cachedRes.json();
-                console.log('[BuilderStatus] ← Backend response:', cachedData);
 
-                if (cachedData?.is_approved === true) {
-                    console.log('[BuilderStatus] ✅ Approved from DB, skipping Pacifica');
-                    setIsBuilderApproved(true);
-                    return;
-                }
-
-                console.log('[BuilderStatus] → Backend says not approved, checking Pacifica...');
+                // 2. Идем на Pacifica чтобы убедиться, что рейт актуальный
                 const res = await fetch(`https://api.pacifica.fi/api/v1/account/builder_codes/approvals?account=${walletAddress}`);
                 const data = await res.json();
-                console.log('[BuilderStatus] ← Pacifica response:', data);
 
-                const isApproved = Array.isArray(data) && data.some(b => b.builder_code === BUILDER_CODE);
-                console.log(`[BuilderStatus] Pacifica isApproved: ${isApproved}`);
+                // КРИТИЧНОЕ ИЗМЕНЕНИЕ: Проверяем и наличие кода, И то, что fee_rate >= MAX_FEE_RATE
+                const isApproved = Array.isArray(data) && data.some(b =>
+                    b.builder_code === BUILDER_CODE &&
+                    parseFloat(b.max_fee_rate) >= parseFloat(MAX_FEE_RATE)
+                );
+
                 setIsBuilderApproved(isApproved);
+
+                // Если в БД было true, а по факту комиссия старая (false) -> обновляем БД на false
+                if (cachedData?.is_approved !== isApproved) {
+                    await privateFetch(`${baseUrl}/api/user/update-builder-status`, {
+                        method: 'POST',
+                        body: JSON.stringify({ is_approved: isApproved })
+                    }, () => identityToken);
+                }
 
                 if (!isApproved) {
                     setTimeout(() => setShowActivationModal(true), 1000);
                 }
-
-                await privateFetch(`${baseUrl}/api/user/update-builder-status`, {
-                    method: 'POST',
-                    body: JSON.stringify({ is_approved: isApproved })
-                }, () => identityToken);
 
             } catch (e) {
                 console.error('[BuilderStatus] ❌ Error:', e);
@@ -134,17 +122,12 @@ export default function AppHeader() {
             };
 
             const messageString = stringifySorted(payloadToSign);
-
             const messageUint8Array = new TextEncoder().encode(messageString);
 
             const { signature: signatureUint8Array } = await signMessage({
                 message: messageUint8Array,
                 wallet: selectedWallet,
-                options: {
-                    uiOptions: {
-                        title: 'Activate OceanX Builder'
-                    }
-                }
+                options: { uiOptions: { title: 'Activate OceanX Builder' } }
             });
 
             const signatureBase58 = bs58.encode(signatureUint8Array);
@@ -197,6 +180,88 @@ export default function AppHeader() {
         }
     };
 
+    // ==========================================
+    // ФУНКЦИЯ ДЛЯ АДМИНА: ОБНОВЛЕНИЕ FEE RATE
+    // ==========================================
+    const handleUpdateFeeRate = async () => {
+        if (!wallets || wallets.length === 0) {
+            toast.error("Wallet not ready.");
+            return;
+        }
+
+        try {
+            const selectedWallet = wallets.find(w => w.address === walletAddress)
+                || wallets.find(w => w.walletClientType === 'phantom')
+                || wallets[0];
+
+            const timestamp = Date.now();
+            const NEW_FEE_RATE = MAX_FEE_RATE; // Берем из константы (0.01)
+
+            const payloadToSign = {
+                timestamp: timestamp,
+                expiry_window: 60000,
+                type: "update_builder_code_fee_rate",
+                data: {
+                    builder_code: BUILDER_CODE,
+                    fee_rate: NEW_FEE_RATE
+                }
+            };
+
+            const stringifySorted = (obj) => {
+                if (typeof obj !== 'object' || obj === null) return JSON.stringify(obj);
+                if (Array.isArray(obj)) return `[${obj.map(stringifySorted).join(',')}]`;
+                const keys = Object.keys(obj).sort();
+                const pairs = keys.map(k => `"${k}":${stringifySorted(obj[k])}`);
+                return `{${pairs.join(',')}}`;
+            };
+
+            const messageString = stringifySorted(payloadToSign);
+            const messageUint8Array = new TextEncoder().encode(messageString);
+
+            const { signature: signatureUint8Array } = await signMessage({
+                message: messageUint8Array,
+                wallet: selectedWallet,
+                options: { uiOptions: { title: 'Update Builder Fee Rate' } }
+            });
+
+            const signatureBase58 = bs58.encode(signatureUint8Array);
+
+            const finalPayload = {
+                account: walletAddress,
+                agent_wallet: null,
+                signature: signatureBase58,
+                timestamp: timestamp,
+                expiry_window: 60000,
+                builder_code: BUILDER_CODE,
+                fee_rate: NEW_FEE_RATE
+            };
+
+            const pacificaResponse = await fetch("https://api.pacifica.fi/api/v1/builder/update_fee_rate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(finalPayload)
+            });
+
+            const responseText = await pacificaResponse.text();
+            let pacificaResult;
+
+            try {
+                pacificaResult = JSON.parse(responseText);
+            } catch (e) {
+                pacificaResult = { error: responseText || "Unknown error" };
+            }
+
+            if (pacificaResponse.ok && !pacificaResult.error) {
+                toast.success(`✅ Global Fee rate updated to ${NEW_FEE_RATE} on Pacifica!`);
+            } else {
+                toast.error(pacificaResult.error || "Exchange error");
+            }
+        } catch (err) {
+            console.error("Error updating fee rate:", err);
+            toast.error("Failed to update fee rate. Check console.");
+        }
+    };
+
     const handleTutorialClick = () => {
         if (location.pathname === '/copytrading') {
             window.dispatchEvent(new Event('open-copy-guide'));
@@ -209,13 +274,10 @@ export default function AppHeader() {
         <header className="app-header">
             <div className="header-container">
                 <div className="header-left">
-                    <div className="logo-group">
-                    </div>
-
+                    <div className="logo-group"></div>
                     <nav className="glass-btn desktop-nav">
                         <NavLink to="/" className={getLinkClass}>Main Page</NavLink>
                     </nav>
-
                     <nav className="glass-btn desktop-nav" style={{ marginLeft: '20px' }}>
                         <NavLink to="/copytrading" id="step-copy-trading" className={getLinkClass}>Copy Trading</NavLink>
                         <NavLink to="/strategies" className={getLinkClass}>Strategies</NavLink>
@@ -227,7 +289,6 @@ export default function AppHeader() {
                             <div className={`nav-link dropdown-trigger ${isStatsHovered ? 'hovered' : ''} ${location.pathname.includes('stats') || location.pathname.includes('liquidations') || location.pathname.includes('heatmaps') ? 'active' : ''}`}>
                                 Insights <ChevronDown size={14} className={`arrow ${isStatsHovered ? 'open' : ''}`} />
                             </div>
-
                             {isStatsHovered && (
                                 <div className="oceanx-glass-menu">
                                     <NavLink to="/stats" className="glass-item" onClick={() => setIsStatsHovered(false)}>
@@ -249,19 +310,23 @@ export default function AppHeader() {
                 </div>
 
                 <div className="header-actions">
-                    <button
-                        className="glass-btn icon-btn"
-                        title="Show Tutorial"
-                        onClick={handleTutorialClick}
-                    >
+                    {/* АДМИНСКАЯ КНОПКА ВИДНА ТОЛЬКО ТЕБЕ */}
+                    {walletAddress === ADMIN_WALLET && (
+                        <button
+                            className="glass-btn icon-btn"
+                            title="Update Pacifica Global Fee"
+                            onClick={handleUpdateFeeRate}
+                            style={{color: '#f59e0b', borderColor: '#f59e0b'}}
+                        >
+                            Update Global Fee
+                        </button>
+                    )}
+
+                    <button className="glass-btn icon-btn" title="Show Tutorial" onClick={handleTutorialClick}>
                         <BookOpen size={20} />
                     </button>
 
-                    <button
-                        className="glass-btn icon-btn desktop-only"
-                        title="Bridge / Deposit"
-                        onClick={() => setIsBridgeOpen(true)}
-                    >
+                    <button className="glass-btn icon-btn desktop-only" title="Bridge / Deposit" onClick={() => setIsBridgeOpen(true)}>
                         <ArrowLeftRight size={20} />
                     </button>
 
@@ -273,12 +338,9 @@ export default function AppHeader() {
                             style={{
                                 display: 'flex', alignItems: 'center', gap: '6px',
                                 background: 'linear-gradient(90deg, #0891b2, #0284c7)',
-                                color: 'white',
-                                border: '1px solid rgba(34, 211, 238, 0.4)',
-                                padding: '8px 16px',
-                                borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer',
-                                opacity: isApproving ? 0.7 : 1,
-                                boxShadow: '0 0 15px rgba(8, 145, 178, 0.3)'
+                                color: 'white', border: '1px solid rgba(34, 211, 238, 0.4)',
+                                padding: '8px 16px', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer',
+                                opacity: isApproving ? 0.7 : 1, boxShadow: '0 0 15px rgba(8, 145, 178, 0.3)'
                             }}
                         >
                             <Zap size={16} color="#22d3ee" fill="#22d3ee" />
@@ -290,10 +352,7 @@ export default function AppHeader() {
                         <WalletConnectButton />
                     </div>
 
-                    <button
-                        className="glass-btn mobile-menu-btn"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    >
+                    <button className="glass-btn mobile-menu-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
@@ -310,12 +369,7 @@ export default function AppHeader() {
                 </div>
             )}
 
-            {isBridgeOpen && (
-                <BridgeModal
-                    onClose={() => setIsBridgeOpen(false)}
-                    recipientAddress={walletAddress}
-                />
-            )}
+            {isBridgeOpen && <BridgeModal onClose={() => setIsBridgeOpen(false)} recipientAddress={walletAddress} />}
 
             {walletAddress && showActivationModal && createPortal(
                 <div className="builder-modal-overlay">
@@ -324,24 +378,15 @@ export default function AppHeader() {
                             <Zap size={36} color="#22d3ee" fill="#22d3ee" />
                         </div>
                         <h2>Almost done!</h2>
-                        <p>
-                            In order for OceanX to execute trades on your behalf,
-                            you need to activate builder code.
-                        </p>
+                        <p>In order for OceanX to execute trades on your behalf, you need to activate builder code.</p>
                         <div className="builder-modal-features">
                             <div className="feature-item">1-Click Copy Trading</div>
                             <div className="feature-item">Best UX</div>
                             <div className="feature-item">Fast transaction processing</div>
                         </div>
-
-                        <button
-                            className="builder-activate-btn"
-                            onClick={handleActivationFromModal}
-                            disabled={isApproving}
-                        >
+                        <button className="builder-activate-btn" onClick={handleActivationFromModal} disabled={isApproving}>
                             {isApproving ? "Signing..." : "Activate OceanX"}
                         </button>
-
                         <button className="builder-skip-btn" onClick={() => setShowActivationModal(false)}>
                             Do it later
                         </button>
