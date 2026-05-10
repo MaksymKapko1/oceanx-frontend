@@ -51,11 +51,19 @@ export default function AppHeader() {
                 const cachedRes = await privateFetch(`${baseUrl}/api/user/builder-status`, { method: 'GET' }, () => identityToken);
                 const cachedData = await cachedRes.json();
 
-                // 2. Идем на Pacifica чтобы убедиться, что рейт актуальный
+                // 🛑 СПАСИТЕЛЬНЫЙ БЛОК КОТОРЫЙ БЫЛ УДАЛЕН 🛑
+                // Если в БД уже true, значит юзер уже всё подписал.
+                // ВЕРИМ БД и сразу выходим, чтобы не поймать старый кэш от биржи!
+                if (cachedData?.is_approved === true) {
+                    setIsBuilderApproved(true);
+                    return;
+                }
+
+                // 2. Идем на Pacifica ТОЛЬКО если в нашей БД false
                 const res = await fetch(`https://api.pacifica.fi/api/v1/account/builder_codes/approvals?account=${walletAddress}`);
                 const data = await res.json();
 
-                // КРИТИЧНОЕ ИЗМЕНЕНИЕ: Проверяем и наличие кода, И то, что fee_rate >= MAX_FEE_RATE
+                // Проверяем и наличие кода, И то, что fee_rate >= MAX_FEE_RATE
                 const isApproved = Array.isArray(data) && data.some(b =>
                     b.builder_code === BUILDER_CODE &&
                     parseFloat(b.max_fee_rate) >= parseFloat(MAX_FEE_RATE)
@@ -63,11 +71,11 @@ export default function AppHeader() {
 
                 setIsBuilderApproved(isApproved);
 
-                // Если в БД было true, а по факту комиссия старая (false) -> обновляем БД на false
-                if (cachedData?.is_approved !== isApproved) {
+                // Если биржа говорит true, а у нас было false -> обновляем БД на true
+                if (isApproved && cachedData?.is_approved !== true) {
                     await privateFetch(`${baseUrl}/api/user/update-builder-status`, {
                         method: 'POST',
-                        body: JSON.stringify({ is_approved: isApproved })
+                        body: JSON.stringify({ is_approved: true })
                     }, () => identityToken);
                 }
 
