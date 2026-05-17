@@ -15,7 +15,7 @@ import {toast} from "sonner";
 
 // --- КОНСТАНТЫ ---
 const BUILDER_CODE = "redwingss";
-const MAX_FEE_RATE = "0.001"; // Новая комиссия
+const MAX_FEE_RATE = "0.0001"; // Новая комиссия
 const ADMIN_WALLET = "97TqKNTw7ZgHWpUDs2mYn4f1TWeLnGNFTRn3QufgD5Gh"; // Вставь свой кошелек
 
 export default function AppHeader() {
@@ -51,9 +51,6 @@ export default function AppHeader() {
                 const cachedRes = await privateFetch(`${baseUrl}/api/user/builder-status`, { method: 'GET' }, () => identityToken);
                 const cachedData = await cachedRes.json();
 
-                // 🛑 СПАСИТЕЛЬНЫЙ БЛОК КОТОРЫЙ БЫЛ УДАЛЕН 🛑
-                // Если в БД уже true, значит юзер уже всё подписал.
-                // ВЕРИМ БД и сразу выходим, чтобы не поймать старый кэш от биржи!
                 if (cachedData?.is_approved === true) {
                     setIsBuilderApproved(true);
                     return;
