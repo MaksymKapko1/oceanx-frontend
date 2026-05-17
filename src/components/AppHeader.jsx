@@ -15,7 +15,7 @@ import {toast} from "sonner";
 
 // --- КОНСТАНТЫ ---
 const BUILDER_CODE = "redwingss";
-const MAX_FEE_RATE = "0.00001"; // Новая комиссия
+const MAX_FEE_RATE = "0.0001"; // Новая комиссия
 const ADMIN_WALLET = "97TqKNTw7ZgHWpUDs2mYn4f1TWeLnGNFTRn3QufgD5Gh"; // Вставь свой кошелек
 
 export default function AppHeader() {
